@@ -6,7 +6,7 @@ const basePath = path.resolve(__dirname);
 const projectPath = `${basePath}/src`;
 
 module.exports = {
-  entry: `${basePath}/src`,
+  entry: `${basePath}/src/index.jsx`,
   output: {
     filename: "app.js?v=[hash]",
     path: `${basePath}/dist`
