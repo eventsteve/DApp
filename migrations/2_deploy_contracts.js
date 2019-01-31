@@ -1,5 +1,5 @@
-var Adoption = artifacts.require("Adoption");
+var DocumentManager = artifacts.require("DocumentManager.sol");
 
 module.exports = function(deployer) {
-  deployer.deploy(Adoption);
+  deployer.deploy(DocumentManager);
 };
