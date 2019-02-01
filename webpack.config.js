@@ -37,6 +37,9 @@ module.exports = {
     ]
   },
   devtool: "source-map",
+  node: {
+    fs: "empty"
+  },
   plugins: [
     new HtmlWebpackPlugin({
       template: `${projectPath}/index.html`

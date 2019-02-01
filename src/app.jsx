@@ -1,17 +1,38 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import TruffleContract from 'truffle-contract'
-import {fetchAccounts} from './common/web3'
+import fs from 'fs';
 
 class App extends Component {
   constructor(props) {
     super(props);
-    this.state = {isConnected: false};
-    this.web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:7545'));
+    this.state = {
+      web3: null
+    }
   }
-  componentDidMount() {
-    fetchAccounts();
-  }
+
+  componentWillMount(){
+    fs.readFile('../build/contracts/DocumentManager.json', function(err, data) {
+      console.log(data);
+    });
+    // const abcd = JSON.parse(readFileSync('../build/contracts/DocumentManager.json', 'utf8'));
+    
+    if (window.ethereum) {
+      web3 = new Web3(window.ethereum);
+      try { 
+         window.ethereum.enable().then(function() {
+          //  const abi = JSON.stringify(contract.abi);
+          //   const address = JSON.stringify(contract.abi);
+          //  const contractManager = new web3.eth.Contract(abi, address);
+         });
+      } catch(e) {
+         // User has denied account access to DApp...
+      }
+   }
+   else {
+       alert('You have to install MetaMask !');
+   }
+}
+
   render() {
     return (
       <div>

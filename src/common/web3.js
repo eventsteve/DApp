@@ -1,44 +1,54 @@
-import isEmpty from 'lodash/isEmpty';
+import web3 from './web3';
 
-export const fetchNetwork = () => {
-  return new Promise((resolve, reject) => {
-    const { web3 } = window;
 
-    web3 && web3.version && web3.version.getNetwork((err, netId) => {
-      if (err) {
-        reject(err);
-      } else {
-        resolve(netId);
-      }
-    });
-  });
-};
-
-export const fetchAccounts = () => {
-  return new Promise((resolve, reject) => {
-    const { web3 } = window;
-    const ethAccounts = getAccounts();
-
-    if (isEmpty(ethAccounts)) {
-      web3 && web3.eth && web3.eth.getAccounts((err, accounts) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(accounts);
-        }
-      });
-    } else {
-      resolve(ethAccounts);
-    }
-  });
-};
-
-function getAccounts() {
-  try {
-    const { web3 } = window;
-    // throws if no account selected
-    return web3.eth.accounts;
-  } catch (e) {
-    return [];
+if (window.ethereum) {
+  web3 = new Web3(window.ethereum);
+  try { 
+     window.ethereum.enable().then(function() {
+      //  const abi = JSON.stringify(contract.abi);
+      //   const address = JSON.stringify(contract.abi);
+      //  const contractManager = new web3.eth.Contract(abi, address);
+     });
+  } catch(e) {
+     // User has denied account access to DApp...
   }
 }
+else {
+   alert('You have to install MetaMask !');
+}
+
+//access our local copy to contract deployed on rinkeby testnet
+//use your own contract address
+const address = '0xb84b12e953f5bcf01b05f926728e855f2d4a67a9';
+//use the ABI from your contract
+const abi = [
+  {
+    "constant": true,
+    "inputs": [],
+    "name": "getHash",
+    "outputs": [
+      {
+        "name": "x",
+        "type": "string"
+      }
+    ],
+    "payable": false,
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "constant": false,
+    "inputs": [
+      {
+        "name": "x",
+        "type": "string"
+      }
+    ],
+    "name": "sendHash",
+    "outputs": [],
+    "payable": false,
+    "stateMutability": "nonpayable",
+    "type": "function"
+  }
+]
+export default new web3.eth.Contract(abi, address);
