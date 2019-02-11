@@ -1,37 +1,38 @@
 import React, { Component } from 'react';
 import Web3 from 'web3';
-import fs from 'fs';
+import {abi, address} from './common/web3';
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      web3: null
+      isConnected: false
     }
   }
 
   componentWillMount(){
-    fs.readFile('../build/contracts/DocumentManager.json', function(err, data) {
-      console.log(data);
-    });
-    // const abcd = JSON.parse(readFileSync('../build/contracts/DocumentManager.json', 'utf8'));
-    
     if (window.ethereum) {
       web3 = new Web3(window.ethereum);
-      try { 
-         window.ethereum.enable().then(function() {
-          //  const abi = JSON.stringify(contract.abi);
-          //   const address = JSON.stringify(contract.abi);
-          //  const contractManager = new web3.eth.Contract(abi, address);
-         });
-      } catch(e) {
-         // User has denied account access to DApp...
-      }
-   }
-   else {
+        window.ethereum.enable().then( () => {
+          web3.eth.net.isListening().then(this.setState({isConnected: true}))
+          .catch(e => console.log('Wow. Something went wrong'));
+          const myContract = new web3.eth.Contract(abi, address);
+
+          // Execute adopt as a transaction by sending account
+          myContract.deployed().then((instance) => {
+            adoptionInstance = instance;
+            return adoptionInstance.ping.call();
+          }).then(function(data) {
+            console.log(data);
+          }).catch(function(err) {
+            console.log(err.message);
+          });
+        });
+
+    } else {
        alert('You have to install MetaMask !');
-   }
-}
+    }
+  }
 
   render() {
     return (

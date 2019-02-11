@@ -6,100 +6,76 @@ contract DocumentManager {
     uint public nbDocuments;
     address public owner;
 
-    enum Status {UNKNOWN,OPEN,DONE,DENIED}
+    enum Status {UNKNOWN, PENDDING, OPEN, DENIED}
 
     struct Document{
         address owner;
-        string document;
         string name;
+        string linkIpfs;
+        string hashFile;
         uint nbRequests;
-        string privateKey;
+        string encryptKey;
         mapping (uint => Request) requests;
     }
 
     struct Request {
         address owner;
         Status status;
-        string key;
     }
 
     constructor() public {
         owner = msg.sender;
     }
 
-    function newDocument(string hash, string name) public {
+    function ping() public pure returns(string) {
+        return "pong";
+    }
+
+    function newDocument(string hash, string name, string linkIpfs, string encryptKey) public {
         nbDocuments++;
         documents[nbDocuments].owner = msg.sender;
-        documents[nbDocuments].document = hash;
         documents[nbDocuments].name = name;
+        documents[nbDocuments].linkIpfs = linkIpfs;
+        documents[nbDocuments].hashFile = hash;
+        documents[nbDocuments].encryptKey = encryptKey;
         documents[nbDocuments].nbRequests = 0;
     }
 
-    function grantAccess(uint documentId, uint requestId, string encryptedKey) public {
-        var document = documents[documentId];
-        if(document.owner == msg.sender) {
-            document.requests[requestId].status = Status.DONE;
-            document.requests[requestId].key = encryptedKey;
+    function requestDocument(uint documentId) public {
+        Document storage document = documents[documentId];
+        document.nbRequests++;
+        Request storage request = document.requests[document.nbRequests];
+        request.status = Status.PENDDING;
+        request.owner = msg.sender;
+    }
+
+    function grantAccess(uint documentId, uint requestId) public {
+        Document storage document = documents[documentId];
+        if(document.owner == msg.sender && document.requests[requestId] == Status.PENDDING) {
+            document.requests[requestId].status = Status.OPEN;
         }
     }
 
     function denyAccess(uint documentId, uint requestId) public {
-        var document = documents[documentId];
+        Document storage document = documents[documentId];
         if(document.owner == msg.sender) {
             document.requests[requestId].status = Status.DENIED;
         }
     }
 
-    function requestDocument(uint documentId, string publicKey) public {
-        var document = documents[documentId];
-        document.nbRequests++;
-        var request = document.requests[document.nbRequests];
-        request.status = Status.OPEN;
-        request.owner = msg.sender;
-        request.key = publicKey;
-    }
-
-    function getLastRequestId(uint documentId) public returns (uint) {
-        return documents[documentId].nbRequests;
-    }
-
-    function getOpenRequestPublicKey(uint documentId, uint requestId) public returns (string) {
-        var request = documents[documentId].requests[requestId];
-        if(request.status == Status.OPEN) {
-            return request.key;
-        }
-        return "";
-    }
-
-    function getRequestOwner(uint documentId, uint requestId) public returns (address) {
-        var document = documents[documentId];
+    function getRequestOwner(uint documentId, uint requestId) public view returns (address) {
+        Document storage document = documents[documentId];
         if(document.owner == msg.sender){
             return document.requests[requestId].owner;
         }
     }
 
-    function getDocument(uint documentId) public returns (string hash) {
-        return documents[documentId].document;
-    }
-
-    function getDocumentName(uint documentId) public returns (string name) {
-        return documents[documentId].name;
-    }
-
-    function getEncryptedKeyFromRequest(uint documentId, uint requestId) public returns (string) {
-        var request = documents[documentId].requests[requestId];
-        if(request.status == Status.DONE) {
-            return request.key;
-        }
-        return "";
-    }
-
-    function getDocumentHash(uint documentId) public returns (string) {
-        return documents[documentId].document;
-    }
-
-    function getRequestStatus(uint documentId, uint requestId) public returns (Status) {
+    function getRequestStatus(uint documentId, uint requestId) public view returns (Status) {
         return documents[documentId].requests[requestId].status;
+    }
+
+    function getDocument(uint documentId) public view returns (string name, string linkIpfs, string hash, string keyEncrypt) {
+        return documents[documentId].document;
     }
 
 }
