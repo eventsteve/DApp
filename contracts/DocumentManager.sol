@@ -51,7 +51,7 @@ contract DocumentManager {
 
     function grantAccess(uint documentId, uint requestId) public {
         Document storage document = documents[documentId];
-        if(document.owner == msg.sender && document.requests[requestId] == Status.PENDDING) {
+        if(document.owner == msg.sender && document.requests[requestId].status == Status.PENDDING) {
             document.requests[requestId].status = Status.OPEN;
         }
     }
@@ -74,8 +74,8 @@ contract DocumentManager {
         return documents[documentId].requests[requestId].status;
     }
 
-    function getDocument(uint documentId) public view returns (string name, string linkIpfs, string hash, string keyEncrypt) {
-        return documents[documentId].document;
-    }
+    // function getDocument(uint documentId) public view returns (string name, string linkIpfs, string hash, string keyEncrypt) {
+    //     return documents[documentId].document;
+    // }
 
 }
