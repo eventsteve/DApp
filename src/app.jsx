@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { initContract } from './common/helper/smartcontract';
+import { testPing } from './common/smartcontract';
 import UploadFile from './components/UploadFile.jsx'
 
 class App extends Component {
@@ -11,7 +11,7 @@ class App extends Component {
   }
 
   componentDidMount() {
-    initContract(window);
+    testPing();
   }
 
   render() {

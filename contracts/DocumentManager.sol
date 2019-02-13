@@ -27,11 +27,7 @@ contract DocumentManager {
         owner = msg.sender;
     }
 
-    function ping() public pure returns(string) {
-        return "pong";
-    }
-
-    function newDocument(string hash, string name, string linkIpfs, string encryptKey) public {
+    function newDocument(string hash, string name, string linkIpfs, string encryptKey) public returns (uint){
         nbDocuments++;
         documents[nbDocuments].owner = msg.sender;
         documents[nbDocuments].name = name;
@@ -39,6 +35,7 @@ contract DocumentManager {
         documents[nbDocuments].hashFile = hash;
         documents[nbDocuments].encryptKey = encryptKey;
         documents[nbDocuments].nbRequests = 0;
+        return nbDocuments;
     }
 
     function requestDocument(uint documentId) public {
