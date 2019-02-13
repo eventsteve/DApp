@@ -11,10 +11,9 @@ contract DocumentManager {
     struct Document{
         address owner;
         string name;
-        string linkIpfs;
         string hashFile;
+        string cryptLink;
         uint nbRequests;
-        string encryptKey;
         mapping (uint => Request) requests;
     }
 
@@ -27,13 +26,19 @@ contract DocumentManager {
         owner = msg.sender;
     }
 
-    function newDocument(string hash, string name, string linkIpfs, string encryptKey) public returns (uint){
+    function newDocument(
+        string name,
+        string hashFile,
+        string cryptLink
+    )
+        public
+        returns (uint)
+    {
         nbDocuments++;
         documents[nbDocuments].owner = msg.sender;
         documents[nbDocuments].name = name;
-        documents[nbDocuments].linkIpfs = linkIpfs;
-        documents[nbDocuments].hashFile = hash;
-        documents[nbDocuments].encryptKey = encryptKey;
+        documents[nbDocuments].hashFile = hashFile;
+        documents[nbDocuments].cryptLink = cryptLink;
         documents[nbDocuments].nbRequests = 0;
         return nbDocuments;
     }
@@ -71,8 +76,25 @@ contract DocumentManager {
         return documents[documentId].requests[requestId].status;
     }
 
-    // function getDocument(uint documentId) public view returns (string name, string linkIpfs, string hash, string keyEncrypt) {
-    //     return documents[documentId].document;
-    // }
+    function getDocument(
+        uint documentId
+    )
+        public
+        view
+        returns (
+            address ownerO,
+            string name,
+            string hashFile,
+            string cryptLink,
+            uint nbRequests
+        )
+    {
+        return (
+            documents[documentId].owner,
+            documents[documentId].name, documents[documentId].hashFile,
+            documents[documentId].cryptLink,
+            documents[documentId].nbRequests
+        );
+    }
 
 }

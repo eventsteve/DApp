@@ -6,12 +6,10 @@ export async function testPing() {
     // get account
     const accounts = await web3.eth.getAccounts();
     const docContract = await getDocManagerFactory();
-    // const result = await docContract.methods.ping().call();
-    // const result = await docContract.methods.newDocument("hash", "name", "linkIpfs", "encryptKey").send({from: accounts[0]});
-    // console.log(result);
-    // const getBlock = await docContract.documents;
-    // console.log(getBlock);
-    const latest = await web3.eth.getBlockNumber()
-    web3.eth.getStorageAt("0x04239fd749af6b7f8ae1028a3ee100e1e4d5525d", latest)
-    .then(console.log);
+    // const result = await docContract.methods.newDocument("name", "hash file", "linkIpfs").send({from: accounts[0]});
+    
+    const block =  await docContract.methods.getDocument(1).call()
+    // web3.eth.getStorageAt("0x04239fd749af6b7f8ae1028a3ee100e1e4d5525d", latest)
+    // .then(console.log);
+    console.log(block);
 }

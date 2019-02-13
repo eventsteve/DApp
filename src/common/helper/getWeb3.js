@@ -13,7 +13,7 @@ export async function getWeb3(){
       }
     }
     else {
-      alert('Not found web3');
+      alert('MetaMask is not installed');
       reject(0);
     }
   });
