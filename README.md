@@ -1,7 +1,7 @@
 # SmartContract - Solidity - Truflle - React - IPFS
 
 ## Setup Tool
-- Download ganache from `https://truffleframework.com/ganache` and setting port `8545` same port on file `truflle.js`
+- Download `ganache` from `https://truffleframework.com/ganache` and setting port `8545` same port on file `truflle.js`
 - Setup `MetaMask` for browser, then create a account and a customRpc listen to port truffle `8545`.
 - Install `Ipfs` from `https://docs.ipfs.io/introduction/install`
 

@@ -1,7 +1,7 @@
 pragma solidity ^0.4.22;
 
 contract DocumentManager {
-	
+
     mapping (uint => Document) documents;
     uint public nbDocuments;
     address public owner;
@@ -26,21 +26,36 @@ contract DocumentManager {
         owner = msg.sender;
     }
 
+    event LogCreatedDoc(
+        uint indexed numDoc,
+        address indexed _owner,
+        string _name,
+        string _hashFile
+    );
+
     function newDocument(
-        string name,
-        string hashFile,
-        string cryptLink
+        string _name,
+        string _hashFile,
+        string _cryptLink
     )
         public
-        returns (uint)
+        returns (bool success)
     {
         nbDocuments++;
         documents[nbDocuments].owner = msg.sender;
-        documents[nbDocuments].name = name;
-        documents[nbDocuments].hashFile = hashFile;
-        documents[nbDocuments].cryptLink = cryptLink;
+        documents[nbDocuments].name = _name;
+        documents[nbDocuments].hashFile = _hashFile;
+        documents[nbDocuments].cryptLink = _cryptLink;
         documents[nbDocuments].nbRequests = 0;
-        return nbDocuments;
+
+        emit LogCreatedDoc(
+            nbDocuments,
+            msg.sender,
+            _name,
+            _hashFile
+        );
+
+        return true;
     }
 
     function requestDocument(uint documentId) public {
@@ -53,14 +68,14 @@ contract DocumentManager {
 
     function grantAccess(uint documentId, uint requestId) public {
         Document storage document = documents[documentId];
-        if(document.owner == msg.sender && document.requests[requestId].status == Status.PENDDING) {
+        if (document.owner == msg.sender && document.requests[requestId].status == Status.PENDDING) {
             document.requests[requestId].status = Status.OPEN;
         }
     }
 
     function denyAccess(uint documentId, uint requestId) public {
         Document storage document = documents[documentId];
-        if(document.owner == msg.sender) {
+        if (document.owner == msg.sender) {
             document.requests[requestId].status = Status.DENIED;
         }
     }
@@ -76,7 +91,7 @@ contract DocumentManager {
         return documents[documentId].requests[requestId].status;
     }
 
-    function getDocument(
+    function getDocumentByIndex(
         uint documentId
     )
         public
@@ -91,10 +106,10 @@ contract DocumentManager {
     {
         return (
             documents[documentId].owner,
-            documents[documentId].name, documents[documentId].hashFile,
+            documents[documentId].name,
+            documents[documentId].hashFile,
             documents[documentId].cryptLink,
             documents[documentId].nbRequests
         );
     }
-
 }
