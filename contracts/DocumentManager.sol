@@ -112,4 +112,24 @@ contract DocumentManager {
             documents[documentId].nbRequests
         );
     }
+
+    function getLastestDocument()
+        public
+        view
+        returns (
+            address ownerO,
+            string name,
+            string hashFile,
+            string cryptLink,
+            uint nbRequests
+        )
+    {
+        return (
+            documents[nbDocuments].owner,
+            documents[nbDocuments].name,
+            documents[nbDocuments].hashFile,
+            documents[nbDocuments].cryptLink,
+            documents[nbDocuments].nbRequests
+        );
+    }
 }

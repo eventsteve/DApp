@@ -19,5 +19,5 @@ export async function testPing() {
     })
     .on('error', console.error);
 
-    await docContract.methods.newDocument("name", "hash file", "linkIpfs").send({from: accounts[0]});
+    // await docContract.methods.newDocument("name", "hash file", "linkIpfs").send({from: accounts[0]});
 }
