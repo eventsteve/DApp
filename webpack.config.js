@@ -3,13 +3,17 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 const basePath = path.resolve(__dirname);
-const projectPath = `${basePath}/src`;
+const dir = {
+  app: `${basePath}/src`,
+  public: `${basePath}/public`,
+  build: `${basePath}/dist`,
+}
 
 module.exports = {
-  entry: ['babel-polyfill',`${basePath}/src/index.jsx`],
+  entry: ['babel-polyfill',`${dir.app}/index.js`],
   output: {
     filename: "app.js?v=[hash]",
-    path: `${basePath}/dist`
+    path: dir.build
   },
   module: {
     rules: [
@@ -42,11 +46,15 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: `${projectPath}/index.html`
+      template: `${dir.app}/index.html`
     }),
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
     })
-  ]
+  ],
+  resolve: {
+    modules: [dir.app, dir.public, "node_modules"],
+    extensions: ['.js', '.jsx', '.json', 'png', 'jpg', 'svg']
+  }
 };

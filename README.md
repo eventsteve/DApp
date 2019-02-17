@@ -5,19 +5,25 @@
 - Setup `MetaMask` for browser, then create a account and a customRpc listen to port truffle `8545`.
 - Install `Ipfs` from `https://docs.ipfs.io/introduction/install`
 - Run ipfs
-- `ipfs init`
-- `ipfs deamon`
+```
+ipfs init
+ipfs daemon
+```
 - Config cors header ipfs client
-- `ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"`
-- `ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\",\ "GET\"]"`
+```
+ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\",\"GET\"]"
+```
 
 ## Start build
-- `git clone https://github.com/Tinh96nb/DApp.git`
-- `cd DApp`
-- `npm install -g truffle`
-- `truffle compile`
-- `truffle migrate`
-- `npm install`
+```
+git clone https://github.com/Tinh96nb/DApp.git`
+cd DApp
+npm install -g truffle
+truffle compile
+truffle migrate
+npm install
+```
 
 ## Start project
 - Start mode dev: `npm start`
