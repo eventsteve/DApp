@@ -26,10 +26,12 @@
     "webpack-dev-server": "3.1.14"
   },
   "dependencies": {
+    "bootstrap": "4.3.1",
     "crypto-js": "^3.1.9-1",
     "file-saver": "2.0.1",
     "ipfs-http-client": "29.1.0",
     "react": "16.7.0",
+    "react-bootstrap": "1.0.0-beta.5",
     "react-dom": "16.7.0",
     "react-redux": "6.0.0",
     "react-router-dom": "4.3.1",

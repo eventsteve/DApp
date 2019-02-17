@@ -4,6 +4,8 @@ import {
   Route,
   Link
 } from 'react-router-dom';
+import NavBar from 'components/ui/NavBar';
+import {Container, Row, Col} from 'react-bootstrap';
 
 import { HomeContainer } from './home';
 import { DocContainer } from './document';
@@ -12,15 +14,17 @@ class App extends Component {
   render() {
     return (
       <Router>
-        <div>
-        <ul>
-          <li>
-            <Link to="/doc">Netflix</Link>
-          </li>
-        </ul>
-          <Route exact path='/' component={HomeContainer}/>
-          <Route path='/doc' component={DocContainer}/>
-        </div>
+        <>
+        <NavBar />
+        <Container>
+          <Row>
+              <Col md={12}>
+                <Route exact path='/' component={HomeContainer}/>
+                <Route path='/docs' component={DocContainer}/>
+              </Col>
+          </Row>
+        </Container>
+        </>
       </Router>
     );
   }

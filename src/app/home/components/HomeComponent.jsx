@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import UploadFile from 'components/form/UploadFile'
+import UploadFile from 'components/form/UploadFile';
 
 class HomeComponent extends Component {
   render() {

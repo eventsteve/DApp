@@ -41,6 +41,10 @@ module.exports = {
     ]
   },
   devtool: "source-map",
+  // fix router refest not get
+  devServer: {
+    historyApiFallback: true
+  },
   node: {
     fs: "empty"
   },
