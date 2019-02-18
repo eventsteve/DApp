@@ -19,7 +19,8 @@ class UploadFile extends React.Component {
     let reader = new window.FileReader()
     reader.onload = async () => {
       const result = await saveToIpfs(reader);
-      this.setState({added_file_hash: result.hash})
+      this.props.getInfo(result);
+      this.setState({added_file_hash: result.path})
     }
     reader.readAsDataURL(file);
   }
@@ -31,13 +32,14 @@ class UploadFile extends React.Component {
   render () {
     return (
       <div>
-        <input type="file" name="" id="" onChange={this.handleselectedFile} />
+        <input type="file" onChange={this.handleselectedFile} />
         <div>
           <a target="_blank"
             href={'https://ipfs.io/ipfs/' + this.state.added_file_hash}>
             {this.state.added_file_hash}
           </a>
         </div>
+
         <button onClick={this.getfile}>Get file</button>
       </div>
     )
