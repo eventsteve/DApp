@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
-  Route,
-  Link
+  Route
 } from 'react-router-dom';
 import NavBar from 'components/ui/NavBar';
 import {Container, Row, Col} from 'react-bootstrap';
+import CheckWeb3 from 'utils/helper/checkWeb3';
+import 'css/main.css';
 
 import { HomeContainer } from './home';
 import { DocContainer } from './document';
@@ -13,19 +14,21 @@ import { DocContainer } from './document';
 class App extends Component {
   render() {
     return (
-      <Router>
-        <>
-        <NavBar />
-        <Container>
-          <Row>
-              <Col md={12}>
-                <Route exact path='/' component={HomeContainer}/>
-                <Route path='/docs' component={DocContainer}/>
-              </Col>
-          </Row>
-        </Container>
-        </>
-      </Router>
+      <CheckWeb3>
+        <Router>
+          <>
+          <NavBar />
+          <Container>
+            <Row>
+                <Col md={12}>
+                  <Route exact path='/' component={HomeContainer}/>
+                  <Route path='/docs' component={DocContainer}/>
+                </Col>
+            </Row>
+          </Container>
+          </>
+        </Router>
+      </CheckWeb3>
     );
   }
 }

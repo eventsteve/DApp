@@ -1,20 +1,39 @@
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import DocComponent from '../components/DocComponent.jsx';
+import { Row, Col, Card, Button} from 'react-bootstrap';
+
+import ListDoc from '../components/ListDocument';
+// import ModalAddDoc from '../components/AddDocument';
+
+class DocContainer extends Component {
+  render() {
+    return (
+      <Row className="mt-4">
+        <Col md={12}>
+          <Card>
+            <Card.Header as="h5">List Document</Card.Header>
+            <Card.Body>
+              <Card.Title>Special title treatment</Card.Title>
+              <ListDoc />
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
+    )
+  }
+}
 
 const mapStateToProps = state => {
-  const { currentCount } = state.home;
-  return { currentCount }
-};
-
-const mapDispatchToProps = dispatch => {
-  
   return {
   }
 };
 
-const DocContainer = connect(
+const mapDispatchToProps = dispatch => {
+  return {
+  }
+};
+
+export default connect(
   mapStateToProps,
   mapDispatchToProps
-)(DocComponent);
-
-export default DocContainer;
+)(DocContainer);

@@ -1,4 +1,4 @@
-import contract from '../../../build/contracts/DocumentManager.json'
+import contract from '../../../build/contracts/DocumentManager.json';
 import { getWeb3 } from '../helper/getWeb3';
 
 export async function getDocManagerFactory() {

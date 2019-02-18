@@ -37,7 +37,15 @@ module.exports = {
         test: /\.css$/,
         exclude: /node_modules/,
         use: ['style-loader', 'css-loader']
-       }
+      },
+      {
+        test: /\.(jpe?g|png|gif|svg)$/i,
+        exclude: /node_modules/,
+        use: [{
+          loader: 'file-loader',
+          options: {}
+        }]
+      }
     ]
   },
   devtool: "source-map",
@@ -59,6 +67,6 @@ module.exports = {
   ],
   resolve: {
     modules: [dir.app, dir.public, "node_modules"],
-    extensions: ['.js', '.jsx', '.json', 'png', 'jpg', 'svg']
+    extensions: ['.js', '.jsx', '.json', 'png', 'jpg', 'svg', '.css']
   }
 };

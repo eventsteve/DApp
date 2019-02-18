@@ -1,6 +1,6 @@
 import Web3 from 'web3';
 
-export async function getWeb3(){
+export function getWeb3(){
   return new Promise(async (resolve, reject) => {
     // Modern dapp browsers...
     if (window.ethereum) {
@@ -13,7 +13,6 @@ export async function getWeb3(){
       }
     }
     else {
-      alert('MetaMask is not installed');
       reject(0);
     }
   });
