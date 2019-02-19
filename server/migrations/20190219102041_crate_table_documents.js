@@ -7,6 +7,7 @@ exports.up = function(knex, Promise) {
     t.string('hash').notNull();
     t.string('link_ipfs').notNull();
     t.string('owner').notNull();
+    t.timestamp('created_at').defaultTo(knex.fn.now());
 });
 };
 

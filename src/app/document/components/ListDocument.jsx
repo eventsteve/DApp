@@ -11,7 +11,44 @@ export default class ListDoc extends Component {
     }
   }
 
+  renderTableDoc(documents) {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Hash Doc</th>
+            <th>Hash Link Ipfs</th>
+            <th>Owner</th>
+            <th>Upload at</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {documents.map((doc, index) => {
+            const dateUploaded = new Date(doc.created_at);
+            return (
+              <tr key={index}>
+                <td>{doc.num_doc}</td>
+                <td>{doc.name}</td>
+                <td>{doc.hash}</td>
+                <td>{doc.link_ipfs}</td>
+                <td>{doc.owner}</td>
+                <td>{dateUploaded.toDateString()}</td>
+                <td>
+                  <Button variant="primary">Detail</Button>
+                </td>
+              </tr>
+            )
+          })}
+        </tbody>
+      </Table>
+    )
+  }
+
   render () {
+    const { documents } = this.props
     return (
       <>
         <Button
@@ -20,36 +57,7 @@ export default class ListDoc extends Component {
         >
           Upload new file
         </Button>
-
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>First Name</th>
-              <th>Last Name</th>
-              <th>Username</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1</td>
-              <td>Mark</td>
-              <td>Otto</td>
-              <td>@mdo</td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Jacob</td>
-              <td>Thornton</td>
-              <td>@fat</td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td colSpan="2">Larry the Bird</td>
-              <td>@twitter</td>
-            </tr>
-          </tbody>
-        </Table>
+        {this.renderTableDoc(documents)}
         <ModalUpload
           isShowUpload={this.state.isShowUpload}
           handleHide={() => this.setState({isShowUpload: false})}

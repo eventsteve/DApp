@@ -1,6 +1,7 @@
 const path = require('path')
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require('webpack');
 
 const basePath = path.resolve(__dirname);
 const dir = {
@@ -36,13 +37,13 @@ module.exports = {
       {
         test: /\.css$/,
         exclude: /node_modules/,
-        use: ['style-loader', 'css-loader']
+        use: ["style-loader", "css-loader"]
       },
       {
         test: /\.(jpe?g|png|gif|svg)$/i,
         exclude: /node_modules/,
         use: [{
-          loader: 'file-loader',
+          loader: "file-loader",
           options: {}
         }]
       }
@@ -63,10 +64,14 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: "[name].css",
       chunkFilename: "[id].css"
+    }),
+    new webpack.DefinePlugin({
+      API_ADDRESS: JSON.stringify('http://localhost:3001'),
+      KEY_AES: JSON.stringify('key private')
     })
   ],
   resolve: {
     modules: [dir.app, dir.public, "node_modules"],
-    extensions: ['.js', '.jsx', '.json', 'png', 'jpg', 'svg', '.css']
+    extensions: [".js", ".jsx", ".json", "png", "jpg", "svg", ".css"]
   }
 };

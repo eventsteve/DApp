@@ -1,30 +1,30 @@
-const FETCH_USER = 'user/FETCH_USER';
-const ADD_USER = 'user/ADD_USER';
+import * as request from 'api/request_server';
 
-export const fetchUser = () => {
-  const users = [{username: 'phamtinh', age:'22'},{username: 'ngocthien', age:'24'}];
-  return { type: FETCH_USER, users }
-  // return (dispatch) => {
-  //   
-  //   dispatch({ type: FETCH_USER, users });
-  // };
-};
+const FETCH_DOC = 'doc/FETCH_DOC';
 
-export const addUser = (data) => {
-  return { type: ADD_USER, newUser: data }
-};
+export const fetchDocuments = () => {
+  return (dispatch) => {
+    request.getAllDoc()
+    .then((response) => {
+      dispatch({
+        type: FETCH_DOC,
+        payload: response.data
+      })
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+}
 
 const initState = {
-  list: []
+  documents: []
 }
 
 export const docReducer = (state = initState, action) => {
   switch (action.type) {
-    case FETCH_USER:
-      return { ...state, list: action.users };
-    case ADD_USER:
-      const newList = [ ...state.list, action.newUser ]
-      return { ...state, list: newList };
+      case FETCH_DOC:
+      return { ...state, documents: action.payload };
     default:
       return state;
   }

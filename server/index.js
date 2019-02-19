@@ -2,6 +2,12 @@
 const restify = require("restify");
 const dotenv = require("dotenv");
 dotenv.config();
+const corsMiddleware = require('restify-cors-middleware')
+
+const cors = corsMiddleware({
+  origins: ['http://localhost:3000'],
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+})
 
 // connection database
 const db = require("./src/db");
@@ -14,6 +20,8 @@ const { HomeController } = require("./src/controller/HomeController");
 const { DocController } = require("./src/controller/DocController");
 
 const server = restify.createServer();
+server.pre(cors.preflight)
+server.use(cors.actual)
 server.use(restify.plugins.acceptParser(server.acceptable));
 server.use(restify.plugins.queryParser({ mapParams: false }));
 server.pre(restify.plugins.pre.context());

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import UploadFile from 'components/form/UploadFile';
-import {Card, Button} from 'react-bootstrap';
+import {Card, Table} from 'react-bootstrap';
 
 export default class ListMem extends Component {
   render() {
@@ -8,11 +7,25 @@ export default class ListMem extends Component {
       <Card>
         <Card.Header as="h5">List Member</Card.Header>
         <Card.Body>
-          <Card.Title>Special title treatment</Card.Title>
-          <Card.Text>
-            With supporting text below as a natural lead-in to additional content.
-          </Card.Text>
-          <Button variant="primary">Go somewhere</Button>
+          <Card.Title>List member upload file</Card.Title>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Address</th>
+              </tr>
+            </thead>
+            <tbody>
+                {this.props.members.map((mem, index) => {
+                  return (
+                    <tr key={index}>
+                      <td>{index+1}</td>
+                      <td>{mem}</td>
+                    </tr>
+                  )
+                })}
+            </tbody>
+          </Table>
         </Card.Body>
       </Card>
     );

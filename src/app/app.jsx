@@ -13,6 +13,7 @@ import { DocContainer } from './document';
 
 class App extends Component {
   render() {
+
     return (
       <CheckWeb3>
         <Router>
@@ -22,7 +23,9 @@ class App extends Component {
             <Row>
                 <Col md={12}>
                   <Route exact path='/' component={HomeContainer}/>
-                  <Route path='/docs' component={DocContainer}/>
+                  <Route path='/docs' render={(routeProps) => (
+                      <DocContainer {...routeProps} {...this.props} />
+                    )}/>
                 </Col>
             </Row>
           </Container>
