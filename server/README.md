@@ -1,0 +1,1 @@
+docker run --name doc-mysql -p 3307:3306 -e MYSQL_ROOT_PASSWORD=root -e MYSQL_DATABASE=documents -d mysql:5.5

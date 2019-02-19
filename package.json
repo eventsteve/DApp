@@ -4,6 +4,7 @@
   "description": "",
   "main": "truffle.js",
   "scripts": {
+    "server": "cd server && yarn start",
     "start": "webpack-dev-server --mode development --open --hot --port 3000",
     "build": "webpack --mode production"
   },
@@ -28,6 +29,7 @@
     "webpack-dev-server": "3.1.14"
   },
   "dependencies": {
+    "axios": "^0.18.0",
     "bootstrap": "4.3.1",
     "crypto-js": "^3.1.9-1",
     "file-saver": "2.0.1",

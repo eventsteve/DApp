@@ -1,0 +1,16 @@
+{
+  "name": "document-api",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "pm2-dev start index.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "6.1.0",
+    "knex": "0.15.2",
+    "mysql": "^2.16.0",
+    "restify": "^7.2.3"
+  }
+}
