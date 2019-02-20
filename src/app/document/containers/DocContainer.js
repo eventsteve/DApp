@@ -1,30 +1,30 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Row, Col, Card } from 'react-bootstrap';
+import { Row, Col, Card, Button } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 
 import ListDoc from '../components/ListDocument';
+import ModalUpload from '../components/ModalUpload';
 // import ModalAddDoc from '../components/AddDocument';
 
 import { fetchDocuments } from '../reducer';
 
 class DocContainer extends Component {
 
-  constructor(props, context) {
+  constructor(props) {
     super(props)
-    this.state = { loading: true, drizzleState: null };
-  }
-
-  componentWillMount() {
-    this.props.fetchDocuments();
+    this.state = {
+      isShowUpload: false,
+      loading: true,
+      drizzleState: null
+    };
   }
 
   componentDidMount() {
+    this.props.fetchDocuments();
     const { drizzle } = this.props;
     this.unsubscribe = drizzle.store.subscribe(() => {
-
       const drizzleState = drizzle.store.getState();
-
       if (drizzleState.drizzleStatus.initialized) {
         this.setState({ loading: false, drizzleState });
       }
@@ -35,26 +35,36 @@ class DocContainer extends Component {
     this.unsubscribe();
   }
 
-  getAcc(drizzle) {
-    console.log(drizzle.accounts[0]);
-    
-    
-  }
-
   render() {
-    const { documents} = this.props
-    if (this.state.loading) return "Loading Drizzle...";
+    const { documents } = this.props
+    if (this.state.loading) return <div className="text-center">Connect Drizzle to Ethereum Virtual Machine ...</div>;
     return (
       <Row className="mt-4">
         <Col md={12}>
           <Card>
             <Card.Header as="h5">List Document</Card.Header>
             <Card.Body>
-              <button onClick={() => this.getAcc(this.state.drizzleState)}>getacc</button>
               <Card.Title>List file uploaded</Card.Title>
 
-              <ListDoc documents={documents}/>
+              <Button
+                  variant="primary"
+                  onClick={() => this.setState({isShowUpload: true})}
+              >
+                Upload new file
+              </Button>
 
+              <ListDoc
+                documents={documents}
+                drizzle={this.props.drizzle}
+                drizzleState={this.state.drizzleState}
+              />
+
+              <ModalUpload
+                isShowUpload={this.state.isShowUpload}
+                handleHide={() => this.setState({isShowUpload: false})}
+                drizzle={this.props.drizzle}
+                drizzleState={this.state.drizzleState}
+              />
             </Card.Body>
           </Card>
         </Col>

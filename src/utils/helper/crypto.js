@@ -7,7 +7,7 @@ export function encryptAes(data, keyCrypto = null) {
 }
 
 export function decryptAes(data, keyCrypto = null) {
-    if (keyCrypto) return AES.decrypt(data, keyCrypto);
+    if (keyCrypto) return AES.decrypt(data, keyCrypto).toString(enc.Latin1);
     return AES.decrypt(data, key).toString(enc.Latin1);
 }
 

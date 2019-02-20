@@ -1,14 +1,74 @@
 import React, { Component } from 'react';
-import { Table, Button } from 'react-bootstrap';
-import ModalUpload from './ModalUpload';
+import { Table, Button, Modal } from 'react-bootstrap';
+import { getDocMinedByIndex } from 'utils/helper/callBlockchain';
+import { getFromIpfs } from 'utils/helper/ipfs';
 
 export default class ListDoc extends Component {
   
   constructor(props) {
-    super()
+    super(props)
     this.state = {
-      isShowUpload: false
+      isShowModalDownload: false,
+      docSelecting: {},
+      document: {}
     }
+    this.handleShowModalDownload = this.handleShowModalDownload.bind(this);
+    this.renderModalDownload = this.renderModalDownload.bind(this);
+    this.renderTableDoc = this.renderTableDoc.bind(this);
+    this.handleDownload = this.handleDownload.bind(this);
+  }
+
+  getDocFromBlockchain(numDoc) {
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.DocumentManager;
+    const result = getDocMinedByIndex(numDoc, contract);
+    console.log(result);
+    
+    result.then(block => this.setState({document: block})).catch(console.log);
+  }
+
+  handleDownload(ipfsId) {
+    getFromIpfs(ipfsId);
+  }
+
+  handleShowModalDownload(doc) {
+    this.getDocFromBlockchain(doc.num_doc);
+    this.setState({
+      isShowModalDownload: true,
+      docSelecting: doc
+    })
+  }
+
+  renderModalDownload() {
+    console.log(this.state.document);
+    
+    return (
+      <Modal
+        show={this.state.isShowModalDownload}
+        onHide={() => this.setState({isShowModalDownload: false})}
+      >
+        <Modal.Header closeButton>
+          <Modal.Title>Download File Document</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {/* {this.state.docSelecting.num_doc} */}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => this.setState({isShowModalDownload: false})}
+          >
+            Close
+          </Button>
+          <Button
+            variant="primary"
+            onClick={() => this.handleDownload()}
+          >
+            Download
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    )
   }
 
   renderTableDoc(documents) {
@@ -37,7 +97,12 @@ export default class ListDoc extends Component {
                 <td>{doc.owner}</td>
                 <td>{dateUploaded.toDateString()}</td>
                 <td>
-                  <Button variant="primary">Detail</Button>
+                  <Button
+                    variant="primary"
+                    onClick={() => this.handleShowModalDownload(doc)}
+                  >
+                    Download
+                  </Button>
                 </td>
               </tr>
             )
@@ -51,17 +116,8 @@ export default class ListDoc extends Component {
     const { documents } = this.props
     return (
       <>
-        <Button
-          variant="primary"
-          onClick={() => this.setState({isShowUpload: true})}
-        >
-          Upload new file
-        </Button>
         {this.renderTableDoc(documents)}
-        <ModalUpload
-          isShowUpload={this.state.isShowUpload}
-          handleHide={() => this.setState({isShowUpload: false})}
-        />
+        {this.renderModalDownload()}
       </>
     )
   }

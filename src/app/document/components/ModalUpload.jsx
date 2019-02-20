@@ -1,18 +1,49 @@
 import React, { Component } from 'react';
-import { Modal, Button } from 'react-bootstrap';
+import { Modal, Button, Table } from 'react-bootstrap';
 import UploadFile from 'components/form/UploadFile';
+import { mineNewBlock } from 'utils/helper/callBlockchain';
 
 class ModalUpload extends Component {
 
   constructor(props) {
-    super()
+    super(props)
     this.state = {
-      fileInfo: {}
+      documentInfo: null
     }
   }
 
   getInfoFile(data) {
-    this.setState({fileInfo: data})
+    const { drizzle, drizzleState } = this.props;
+    const contract = drizzle.contracts.DocumentManager;
+    const owner = drizzleState.accounts[0];
+    mineNewBlock(data, contract, owner).then(docMined => {
+      this.setState({documentInfo: docMined})
+    }).catch(console.log);
+  }
+
+  renderFileInfo(document) {
+    return (
+      <Table striped bordered hover>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Hash Doc</th>
+            <th>Hash Ipfs</th>
+            <th>Size</th>
+            <th>Owner</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>{document.num_document}</td>
+            <td>{document.hashFile}</td>
+            <td>{document.path}</td>
+            <td>{document.size}</td>
+            <td>{owner}</td>
+          </tr>
+        </tbody>
+      </Table>
+    )
   }
 
   render() {
@@ -28,6 +59,7 @@ class ModalUpload extends Component {
           <UploadFile
             getInfo={(data) => this.getInfoFile(data)}
           />
+          {this.state.documentInfo ? this.renderFileInfo(this.state.documentInfo) : null}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -36,7 +68,6 @@ class ModalUpload extends Component {
           >
             Close
           </Button>
-          <Button variant="primary">Save changes</Button>
         </Modal.Footer>
       </Modal>
     );

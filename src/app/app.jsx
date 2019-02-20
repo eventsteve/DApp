@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {
   BrowserRouter as Router,
+  Switch,
   Route
 } from 'react-router-dom';
 import NavBar from 'components/ui/NavBar';
@@ -13,22 +14,22 @@ import { DocContainer } from './document';
 
 class App extends Component {
   render() {
-
     return (
       <CheckWeb3>
         <Router>
           <>
-          <NavBar />
-          <Container>
-            <Row>
+            <NavBar />
+            <Container>
+              <Row>
                 <Col md={12}>
-                  <Route exact path='/' component={HomeContainer}/>
-                  <Route path='/docs' render={(routeProps) => (
-                      <DocContainer {...routeProps} {...this.props} />
-                    )}/>
+                  <Switch>
+                    <Route exact path='/' component={HomeContainer}/>
+                    <Route path='/docs' component={(routeProps) => <DocContainer {...routeProps} {...this.props} />}/>
+                    <Route component={() => (<p>Not Found</p>)} />
+                  </Switch>
                 </Col>
-            </Row>
-          </Container>
+              </Row>
+            </Container>
           </>
         </Router>
       </CheckWeb3>

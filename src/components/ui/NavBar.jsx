@@ -6,10 +6,10 @@ export default class NavBar extends Component {
   render() {
     return (
     <Navbar bg="dark" variant="dark">
-      <Navbar.Brand href="#">Doc Manager</Navbar.Brand>
+      <Link to="/" className="navbar-brand">Doc Manager</Link>
       <Nav className="mr-auto">
         <Link to="/" className="nav-link">Home</Link>
-        <Link to="/docs" className="nav-link">List Documents</Link>
+        <Link to="/docs" className="nav-link">Documents</Link>
       </Nav>
     </Navbar>
     );

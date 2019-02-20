@@ -97,11 +97,11 @@ contract DocumentManager {
         public
         view
         returns (
-            address ownerO,
-            string name,
-            string hashFile,
-            string cryptLink,
-            uint nbRequests
+            address _owner,
+            string _name,
+            string _hashFile,
+            string _cryptLink,
+            uint _nbRequests
         )
     {
         return (
@@ -117,11 +117,11 @@ contract DocumentManager {
         public
         view
         returns (
-            address ownerO,
-            string name,
-            string hashFile,
-            string cryptLink,
-            uint nbRequests
+            address _owner,
+            string _name,
+            string _hashFile,
+            string _cryptLink,
+            uint _nbRequests
         )
     {
         return (

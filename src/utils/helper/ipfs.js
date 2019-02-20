@@ -7,13 +7,14 @@ const ipfs = ipfsClient('localhost', '5001', { protocol: 'http' })
 const nameFile = "out.txt";
 
 export const saveToIpfs = (reader) => {
-  const hashFile = hashSha256(reader.result);
-  const arrayBuffer = base64ToArrayBuffer(encryptAes(reader.result));
+  const contentBase64 = reader.result;
+  const hashFile = hashSha256(contentBase64);
+  const arrayBuffer = base64ToArrayBuffer(encryptAes(contentBase64));
   const buffer = Buffer.from(arrayBuffer);
   return ipfs.add(buffer)
   .then((response) => {
     return {
-      path: response[0].path,
+      ipfsCrypt: encryptAes(response[0].path),
       hashFile,
       size: response[0].size
     };
@@ -23,23 +24,28 @@ export const saveToIpfs = (reader) => {
   })
 }
 
-
-export const getFromIpfs = (ipfsId) => {
-  ipfs.get(ipfsId, function (err, files) {
-    files.forEach((file) => {
+export const getFromIpfs = (ipfsCrypt) => {
+  return new Promise((resolve, reject) => {
+    const ipfsId = decryptAes(ipfsCrypt)
+    ipfs.get(ipfsId, (err, files) => {
+      if (err) reject(err);
+      const file = files[0];
       if (file && file.content) {
         const contentBase64 = decryptAes(arrayBufferToBase64(file.content));
+        if (!contentBase64) {
+          reject(`Can't decrypt content file.`);
+        }
         urltoFile(contentBase64, nameFile, 'text/plain')
-          .then(function(file){
-              saveAs(file);
-          })
+        .then((file) => {
+          resolve(saveAs(file));
+        })
       }
     })
   })
 }
 function urltoFile(url, filename, mimeType){
   return (fetch(url)
-      .then(function(res){return res.arrayBuffer();})
-      .then(function(buf){return new File([buf], filename, {type:mimeType});})
+      .then((res)=> res.arrayBuffer())
+      .then((buf) => new File([buf], filename, {type:mimeType}))
   );
 }

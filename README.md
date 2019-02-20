@@ -17,7 +17,7 @@ ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \
 
 ## Start build
 ```
-git clone https://github.com/Tinh96nb/DApp.git`
+git clone https://github.com/Tinh96nb/DApp.git
 cd DApp
 npm install -g truffle
 truffle compile
@@ -26,10 +26,12 @@ npm install
 ```
 
 ## Start project
+- Start serve api: `npm serve`
 - Start mode dev: `npm start`
 - Build product: `npm build`
 
 ## Struct folder
-- `/contracts`: smartcontract.
 - `/migrations`: step file for migrate.
+- `/contracts`: smartcontract.
+- `/server`: server API.
 - `/src`: reactjs front-end.
