@@ -4,8 +4,8 @@ exports.up = function(knex, Promise) {
     t.increments('id').unsigned().primary();
     t.integer('num_doc').notNull().unsigned().unique();
     t.string('name').notNull();
-    t.string('hash').notNull();
-    t.string('link_ipfs').notNull();
+    t.string('hash_content').notNull();
+    t.string('link_ipfs_crypt').notNull();
     t.string('owner').notNull();
     t.timestamp('created_at').defaultTo(knex.fn.now());
 });

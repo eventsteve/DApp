@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Table, Button, Modal } from 'react-bootstrap';
+import { Table, Button, Modal, ListGroup } from 'react-bootstrap';
 import { getDocMinedByIndex } from 'utils/helper/callBlockchain';
 import { getFromIpfs } from 'utils/helper/ipfs';
 
@@ -9,8 +9,7 @@ export default class ListDoc extends Component {
     super(props)
     this.state = {
       isShowModalDownload: false,
-      docSelecting: {},
-      document: {}
+      docSelecting: null,
     }
     this.handleShowModalDownload = this.handleShowModalDownload.bind(this);
     this.renderModalDownload = this.renderModalDownload.bind(this);
@@ -22,26 +21,38 @@ export default class ListDoc extends Component {
     const { drizzle } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const result = getDocMinedByIndex(numDoc, contract);
-    console.log(result);
     
-    result.then(block => this.setState({document: block})).catch(console.log);
+    result.then(block => {
+      this.setState({docSelecting: block})
+      })
+      .catch(console.log);
   }
 
-  handleDownload(ipfsId) {
-    getFromIpfs(ipfsId);
+  handleDownload() {
+    const {linkIpfsCrypt} = this.state.docSelecting
+    getFromIpfs(linkIpfsCrypt);
   }
 
   handleShowModalDownload(doc) {
     this.getDocFromBlockchain(doc.num_doc);
     this.setState({
-      isShowModalDownload: true,
-      docSelecting: doc
+      isShowModalDownload: true
     })
   }
 
+  renderDocDetail(document) {
+    return (
+      <ListGroup>
+        <ListGroup.Item>Name: {document.name}</ListGroup.Item>
+        <ListGroup.Item>Hash content: {document.contentHash}</ListGroup.Item>
+        <ListGroup.Item>Link ipfs crypt: {document.linkIpfsCrypt}</ListGroup.Item>
+        <ListGroup.Item>Owner: {document.owner}</ListGroup.Item>
+      </ListGroup>
+    )
+  }
+
   renderModalDownload() {
-    console.log(this.state.document);
-    
+    const { docSelecting } = this.state
     return (
       <Modal
         show={this.state.isShowModalDownload}
@@ -51,7 +62,7 @@ export default class ListDoc extends Component {
           <Modal.Title>Download File Document</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {/* {this.state.docSelecting.num_doc} */}
+          {docSelecting ? this.renderDocDetail(docSelecting): 'loading ...'}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -92,8 +103,8 @@ export default class ListDoc extends Component {
               <tr key={index}>
                 <td>{doc.num_doc}</td>
                 <td>{doc.name}</td>
-                <td>{doc.hash}</td>
-                <td>{doc.link_ipfs}</td>
+                <td>{doc.hash_content}</td>
+                <td>{doc.link_ipfs_crypt}</td>
                 <td>{doc.owner}</td>
                 <td>{dateUploaded.toDateString()}</td>
                 <td>

@@ -50,7 +50,7 @@ module.exports = {
     ]
   },
   devtool: "source-map",
-  // fix router refest not get
+  // fix router refresh not get path
   devServer: {
     historyApiFallback: true
   },

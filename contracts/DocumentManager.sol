@@ -3,7 +3,7 @@ pragma solidity ^0.4.22;
 contract DocumentManager {
 
     mapping (uint => Document) documents;
-    uint public nbDocuments;
+    uint public numDocuments;
     address public owner;
 
     enum Status {UNKNOWN, PENDDING, OPEN, DENIED}
@@ -11,8 +11,8 @@ contract DocumentManager {
     struct Document{
         address owner;
         string name;
-        string hashFile;
-        string cryptLink;
+        string contentHash;
+        string linkIpfsCrypt;
         uint nbRequests;
         mapping (uint => Request) requests;
     }
@@ -27,32 +27,34 @@ contract DocumentManager {
     }
 
     event LogCreatedDoc(
-        uint indexed numDoc,
+        uint indexed _numDoc,
         address indexed _owner,
         string _name,
-        string _hashFile
+        string _contentHash,
+        string _linkIpfsCrypt
     );
 
     function newDocument(
         string _name,
-        string _hashFile,
-        string _cryptLink
+        string _contentHash,
+        string _linkIpfsCrypt
     )
         public
         returns (bool success)
     {
-        nbDocuments++;
-        documents[nbDocuments].owner = msg.sender;
-        documents[nbDocuments].name = _name;
-        documents[nbDocuments].hashFile = _hashFile;
-        documents[nbDocuments].cryptLink = _cryptLink;
-        documents[nbDocuments].nbRequests = 0;
+        numDocuments++;
+        documents[numDocuments].owner = msg.sender;
+        documents[numDocuments].name = _name;
+        documents[numDocuments].contentHash = _contentHash;
+        documents[numDocuments].linkIpfsCrypt = _linkIpfsCrypt;
+        documents[numDocuments].nbRequests = 0;
 
         emit LogCreatedDoc(
-            nbDocuments,
+            numDocuments,
             msg.sender,
             _name,
-            _hashFile
+            _contentHash,
+            _linkIpfsCrypt
         );
 
         return true;
@@ -99,17 +101,15 @@ contract DocumentManager {
         returns (
             address _owner,
             string _name,
-            string _hashFile,
-            string _cryptLink,
-            uint _nbRequests
+            string _contentHash,
+            string _linkIpfsCrypt
         )
     {
         return (
             documents[documentId].owner,
             documents[documentId].name,
-            documents[documentId].hashFile,
-            documents[documentId].cryptLink,
-            documents[documentId].nbRequests
+            documents[documentId].contentHash,
+            documents[documentId].linkIpfsCrypt
         );
     }
 
@@ -117,19 +117,19 @@ contract DocumentManager {
         public
         view
         returns (
+            uint _numDo,
             address _owner,
             string _name,
-            string _hashFile,
-            string _cryptLink,
-            uint _nbRequests
+            string _contentHash,
+            string _linkIpfsCrypt
         )
     {
         return (
-            documents[nbDocuments].owner,
-            documents[nbDocuments].name,
-            documents[nbDocuments].hashFile,
-            documents[nbDocuments].cryptLink,
-            documents[nbDocuments].nbRequests
+            numDocuments,
+            documents[numDocuments].owner,
+            documents[numDocuments].name,
+            documents[numDocuments].contentHash,
+            documents[numDocuments].linkIpfsCrypt
         );
     }
 }

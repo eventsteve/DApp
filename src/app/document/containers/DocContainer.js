@@ -5,9 +5,7 @@ import PropTypes from 'prop-types';
 
 import ListDoc from '../components/ListDocument';
 import ModalUpload from '../components/ModalUpload';
-// import ModalAddDoc from '../components/AddDocument';
-
-import { fetchDocuments } from '../reducer';
+import { fetchDocuments, addNewDocuments } from '../reducer';
 
 class DocContainer extends Component {
 
@@ -62,6 +60,7 @@ class DocContainer extends Component {
               <ModalUpload
                 isShowUpload={this.state.isShowUpload}
                 handleHide={() => this.setState({isShowUpload: false})}
+                addNewDocuments={this.props.addNewDocuments}
                 drizzle={this.props.drizzle}
                 drizzleState={this.state.drizzleState}
               />
@@ -83,6 +82,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
   return {
     fetchDocuments: () => dispatch(fetchDocuments()),
+    addNewDocuments: (params) => dispatch(addNewDocuments(params)),
   }
 };
 

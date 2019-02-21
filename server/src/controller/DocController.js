@@ -51,7 +51,8 @@ class DocController {
       if (!result) {
         res.send(400, { message: 'errors' });
       }
-      res.send(result);
+      const docInfo = await this.docRepo.getDocById(req.body.num_doc);
+      res.send(docInfo);
     } catch (error) {
       res.send(500, { message: '500 internal server error' });
       console.log(error);

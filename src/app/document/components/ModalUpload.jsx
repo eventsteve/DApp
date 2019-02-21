@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Modal, Button, Table } from 'react-bootstrap';
+import { Modal, Button, Table, ListGroup } from 'react-bootstrap';
 import UploadFile from 'components/form/UploadFile';
 import { mineNewBlock } from 'utils/helper/callBlockchain';
 
@@ -8,47 +8,56 @@ class ModalUpload extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      documentInfo: null
+      documentInfo: null,
+      blockMined: null
     }
   }
 
-  getInfoFile(data) {
+  getInfoFile(infoFileUploaded) {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const owner = drizzleState.accounts[0];
-    mineNewBlock(data, contract, owner).then(docMined => {
-      this.setState({documentInfo: docMined})
-    }).catch(console.log);
+    mineNewBlock(infoFileUploaded, contract, owner)
+      .then(blocMined => {
+        blocMined.dataInfo.linkIpfs = infoFileUploaded.ipfs
+        this.setState({
+          documentInfo: blocMined.dataInfo,
+          blockMined: blocMined.blockInfo
+        })
+        this.props.addNewDocuments(blocMined.dataInfo);
+      }).catch(console.log);
   }
 
   renderFileInfo(document) {
     return (
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Hash Doc</th>
-            <th>Hash Ipfs</th>
-            <th>Size</th>
-            <th>Owner</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>{document.num_document}</td>
-            <td>{document.hashFile}</td>
-            <td>{document.path}</td>
-            <td>{document.size}</td>
-            <td>{owner}</td>
-          </tr>
-        </tbody>
-      </Table>
+      <ListGroup>
+        <ListGroup.Item>Num Doc: {document.numDoc}</ListGroup.Item>
+        <ListGroup.Item>Name: {document.name}</ListGroup.Item>
+        <ListGroup.Item>Hash content: {document.contentHash}</ListGroup.Item>
+        <ListGroup.Item>Link ipfs: {document.linkIpfs}</ListGroup.Item>
+        <ListGroup.Item>Link ipfs crypt: {document.linkIpfsCrypt}</ListGroup.Item>
+        <ListGroup.Item>Owner: {document.owner}</ListGroup.Item>
+      </ListGroup>
+    )
+  }
+
+  renderBlockInfo (block){
+    return (
+      <ListGroup>
+        <ListGroup.Item>Block number: {block.blockNumber}</ListGroup.Item>
+        <ListGroup.Item>Block hash: {block.blockHash}</ListGroup.Item>
+        <ListGroup.Item>Gas used: {block.gasUsed}</ListGroup.Item>
+        <ListGroup.Item>Status: {block.status ? 'Success' : 'Fail'}</ListGroup.Item>
+        <ListGroup.Item>Transaction hash: {block.transactionHash}</ListGroup.Item>
+      </ListGroup>
     )
   }
 
   render() {
+    const { documentInfo, blockMined } = this.state
     return (
       <Modal
+        size="lg"
         show={this.props.isShowUpload}
         onHide={() => this.props.handleHide()}
       >
@@ -59,7 +68,8 @@ class ModalUpload extends Component {
           <UploadFile
             getInfo={(data) => this.getInfoFile(data)}
           />
-          {this.state.documentInfo ? this.renderFileInfo(this.state.documentInfo) : null}
+          { documentInfo ? this.renderFileInfo(documentInfo) : null }
+          { blockMined ? this.renderBlockInfo(blockMined) : null }
         </Modal.Body>
         <Modal.Footer>
           <Button

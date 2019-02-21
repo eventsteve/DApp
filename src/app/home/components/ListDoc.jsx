@@ -26,8 +26,8 @@ export default class ListDoc extends Component {
                     <tr key={index}>
                       <td>{doc.num_doc}</td>
                       <td>{doc.name}</td>
-                      <td>{doc.hash}</td>
-                      <td>{doc.link_ipfs}</td>
+                      <td>{doc.hash_content}</td>
+                      <td>{doc.link_ipfs_crypt}</td>
                       <td>{doc.owner}</td>
                       <td>{dateUploaded.toDateString()}</td>
                     </tr>

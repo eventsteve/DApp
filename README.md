@@ -11,17 +11,16 @@ ipfs daemon
 ```
 - Config cors header ipfs client
 ```
-ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
-ipfs.exe config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\",\"GET\"]"
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
+ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\",\"GET\"]"
 ```
 
-## Start build
+## Run service
 ```
 git clone https://github.com/Tinh96nb/DApp.git
-cd DApp
+npm install -g knex
 npm install -g truffle
-truffle compile
-truffle migrate
+cd DApp
 npm install
 ```
 

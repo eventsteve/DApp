@@ -8,15 +8,15 @@ const nameFile = "out.txt";
 
 export const saveToIpfs = (reader) => {
   const contentBase64 = reader.result;
-  const hashFile = hashSha256(contentBase64);
+  const hashContent = hashSha256(contentBase64);
   const arrayBuffer = base64ToArrayBuffer(encryptAes(contentBase64));
   const buffer = Buffer.from(arrayBuffer);
   return ipfs.add(buffer)
   .then((response) => {
     return {
+      ipfs: response[0].path,
       ipfsCrypt: encryptAes(response[0].path),
-      hashFile,
-      size: response[0].size
+      hashContent
     };
   })
   .catch((err) => {
@@ -27,6 +27,8 @@ export const saveToIpfs = (reader) => {
 export const getFromIpfs = (ipfsCrypt) => {
   return new Promise((resolve, reject) => {
     const ipfsId = decryptAes(ipfsCrypt)
+    console.log(ipfsId);
+    
     ipfs.get(ipfsId, (err, files) => {
       if (err) reject(err);
       const file = files[0];
