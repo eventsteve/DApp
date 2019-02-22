@@ -117,7 +117,7 @@ contract DocumentManager {
         public
         view
         returns (
-            uint _numDo,
+            uint _numDoc,
             address _owner,
             string _name,
             string _contentHash,

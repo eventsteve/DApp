@@ -21,18 +21,18 @@ contract("DocumentManager", async ([owner, mem]) => {
 
     // get block mined
     const docBlockMined = await documentManager.getLastestDocument();
-    
-    const ownerResult = docBlockMined[0];
-    const nameDocResult = docBlockMined[1];
-    const hashContentResult = docBlockMined[2];
-    const cryptLinkResult = docBlockMined[3];
-    const nRequestResult = docBlockMined[4].toNumber()
+
+    const ownerResult = docBlockMined._owner
+    const nameDocResult = docBlockMined._name;
+    const hashContentResult = docBlockMined._contentHash;
+    const cryptLinkResult = docBlockMined._linkIpfsCrypt;
+    const numDoc = docBlockMined._numDoc.toNumber();
     
     assert.equal(ownerResult, mem)
     assert.equal(nameDocResult, nameDoc)
     assert.equal(hashContentResult, hashContent)
     assert.equal(cryptLinkResult, cryptLink)
-    assert.equal(nRequestResult, 0)
+    assert.equal(numDoc, 1)
   })
 
 });
