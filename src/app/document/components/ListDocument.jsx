@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, ListGroup } from 'react-bootstrap';
 import { getDocMinedByIndex } from 'utils/helper/callBlockchain';
-import { getFromIpfs } from 'utils/helper/ipfs';
+import { getFromIpfs, dataToFile } from 'utils/helper/ipfs';
 
 export default class ListDoc extends Component {
   
@@ -29,8 +29,10 @@ export default class ListDoc extends Component {
   }
 
   handleDownload() {
-    const {linkIpfsCrypt} = this.state.docSelecting
-    getFromIpfs(linkIpfsCrypt);
+    const {linkIpfsCrypt, name} = this.state.docSelecting
+    getFromIpfs(linkIpfsCrypt).then((data) => {
+      dataToFile(data, name);
+    });
   }
 
   handleShowModalDownload(doc) {
@@ -43,10 +45,10 @@ export default class ListDoc extends Component {
   renderDocDetail(document) {
     return (
       <ListGroup>
-        <ListGroup.Item>Name: {document.name}</ListGroup.Item>
-        <ListGroup.Item>Hash content: {document.contentHash}</ListGroup.Item>
-        <ListGroup.Item>Link ipfs crypt: {document.linkIpfsCrypt}</ListGroup.Item>
-        <ListGroup.Item>Owner: {document.owner}</ListGroup.Item>
+        <ListGroup.Item><b>Name: </b> {document.name}</ListGroup.Item>
+        <ListGroup.Item><b>Hash content: </b> {document.contentHash}</ListGroup.Item>
+        <ListGroup.Item><b>Link ipfs crypt:</b> {document.linkIpfsCrypt}</ListGroup.Item>
+        <ListGroup.Item><b>Owner address: </b> {document.owner}</ListGroup.Item>
       </ListGroup>
     )
   }
@@ -59,10 +61,10 @@ export default class ListDoc extends Component {
         onHide={() => this.setState({isShowModalDownload: false})}
       >
         <Modal.Header closeButton>
-          <Modal.Title>Download File Document</Modal.Title>
+          <Modal.Title>Download Document</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {docSelecting ? this.renderDocDetail(docSelecting): 'loading ...'}
+          {docSelecting ? this.renderDocDetail(docSelecting): ''}
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -87,13 +89,13 @@ export default class ListDoc extends Component {
       <Table striped bordered hover>
         <thead>
           <tr>
-            <th>#</th>
+            <th style={{width: '5%'}}>#</th>
             <th>Name</th>
             <th>Hash Doc</th>
             <th>Hash Link Ipfs</th>
             <th>Owner</th>
-            <th>Upload at</th>
-            <th>Action</th>
+            <th style={{width: '13%'}}>Upload at</th>
+            <th style={{width: '11%'}}>Action</th>
           </tr>
         </thead>
         <tbody>

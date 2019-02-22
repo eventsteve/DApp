@@ -11,12 +11,12 @@ export default class ListDoc extends Component {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
+                <th style={{width: '5%'}}>#</th>
                 <th>Name</th>
-                <th>Hash Doc</th>
-                <th>Hash Link Ipfs</th>
+                <th>Hash content</th>
+                <th>Link crypt</th>
                 <th>Owner</th>
-                <th>Upload at</th>
+                <th>Time</th>
               </tr>
             </thead>
             <tbody>

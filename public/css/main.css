@@ -1,0 +1,10 @@
+table {
+  word-wrap: break-word;
+  table-layout: fixed;
+}
+.list-group-item {
+  word-break: break-all;
+}
+.pointer {
+  cursor: pointer;
+}

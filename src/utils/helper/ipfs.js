@@ -4,7 +4,6 @@ import { encryptAes, decryptAes, hashSha256 } from 'utils/helper/crypto';
 import { saveAs } from 'file-saver';
 
 const ipfs = ipfsClient('localhost', '5001', { protocol: 'http' })
-const nameFile = "out.txt";
 
 export const saveToIpfs = (reader) => {
   const contentBase64 = reader.result;
@@ -27,8 +26,6 @@ export const saveToIpfs = (reader) => {
 export const getFromIpfs = (ipfsCrypt) => {
   return new Promise((resolve, reject) => {
     const ipfsId = decryptAes(ipfsCrypt)
-    console.log(ipfsId);
-    
     ipfs.get(ipfsId, (err, files) => {
       if (err) reject(err);
       const file = files[0];
@@ -37,17 +34,17 @@ export const getFromIpfs = (ipfsCrypt) => {
         if (!contentBase64) {
           reject(`Can't decrypt content file.`);
         }
-        urltoFile(contentBase64, nameFile, 'text/plain')
-        .then((file) => {
-          resolve(saveAs(file));
-        })
+        resolve(contentBase64)
       }
     })
   })
 }
-function urltoFile(url, filename, mimeType){
-  return (fetch(url)
-      .then((res)=> res.arrayBuffer())
-      .then((buf) => new File([buf], filename, {type:mimeType}))
+export function dataToFile(data, filename, mimeType = 'text/plain'){
+  return (fetch(data)
+    .then((res)=> res.arrayBuffer())
+    .then((buf) => new File([buf], filename, {type:mimeType}))
+    .then((file) => {
+      saveAs(file);
+    })
   );
 }

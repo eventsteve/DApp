@@ -11,7 +11,7 @@ export default class ListMem extends Component {
           <Table striped bordered hover>
             <thead>
               <tr>
-                <th>#</th>
+                <th style={{width: '15%'}}>#</th>
                 <th>Address</th>
               </tr>
             </thead>

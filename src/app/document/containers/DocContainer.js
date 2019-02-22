@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import ListDoc from '../components/ListDocument';
 import ModalUpload from '../components/ModalUpload';
 import { fetchDocuments, addNewDocuments } from '../reducer';
+import loading from 'images/loading.svg';
 
 class DocContainer extends Component {
 
@@ -35,22 +36,26 @@ class DocContainer extends Component {
 
   render() {
     const { documents } = this.props
-    if (this.state.loading) return <div className="text-center">Connect Drizzle to Ethereum Virtual Machine ...</div>;
+    if (this.state.loading) return (
+      <div className="text-center">
+        <img src={loading}/>
+        <p> Connecting to Ethereum Virtual Machine... </p>
+      </div>
+    )
     return (
       <Row className="mt-4">
         <Col md={12}>
           <Card>
-            <Card.Header as="h5">List Document</Card.Header>
-            <Card.Body>
-              <Card.Title>List file uploaded</Card.Title>
-
-              <Button
-                  variant="primary"
+            <Card.Header as="h5">
+            List Document
+                <Button
                   onClick={() => this.setState({isShowUpload: true})}
-              >
-                Upload new file
-              </Button>
-
+                  bsPrefix="btn btn-primary float-right"
+                >
+                  Upload file
+                </Button>
+            </Card.Header>
+            <Card.Body>
               <ListDoc
                 documents={documents}
                 drizzle={this.props.drizzle}

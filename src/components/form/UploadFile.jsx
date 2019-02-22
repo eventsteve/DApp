@@ -4,6 +4,9 @@ import { saveToIpfs } from 'utils/helper/ipfs';
 class UploadFile extends React.Component {
   constructor () {
     super()
+    this.state = {
+      nameFile: null
+    }
     this.handleselectedFile = this.handleselectedFile.bind(this);
   }
 
@@ -11,6 +14,7 @@ class UploadFile extends React.Component {
     event.stopPropagation()
     event.preventDefault()
     const file = event.target.files[0];
+    this.setState({ nameFile: file.name})
     let reader = new window.FileReader()
     reader.onload = async () => {
       const result = await saveToIpfs(reader);
@@ -23,8 +27,11 @@ class UploadFile extends React.Component {
 
   render () {
     return (
-      <div>
-        <input type="file" onChange={this.handleselectedFile} />
+      <div className="d-flex justify-content-center mb-3">
+        <div className="col col-md-4">
+          <input className="custom-file-input" type="file" onChange={this.handleselectedFile} />
+          <label className="custom-file-label">{this.state.nameFile ? this.state.nameFile: 'Choose file'}</label>
+        </div>
       </div>
     )
   }

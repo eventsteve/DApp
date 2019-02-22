@@ -1,5 +1,5 @@
 import { AES, enc, SHA256 } from 'crypto-js';
-const key = "key";
+const key = KEY_AES;
 
 export function encryptAes(data, keyCrypto = null) {
     if (keyCrypto) return AES.encrypt(data, keyCrypto).toString();
