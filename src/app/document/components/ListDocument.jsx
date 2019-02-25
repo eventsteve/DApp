@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, ListGroup } from 'react-bootstrap';
-import { getDocMinedByIndex } from 'utils/helper/callBlockchain';
+import { getDocMinedByIndex, getAllBlock } from 'utils/helper/callBlockchain';
 import { getFromIpfs, dataToFile } from 'utils/helper/ipfs';
 
 export default class ListDoc extends Component {
@@ -17,11 +17,22 @@ export default class ListDoc extends Component {
     this.handleDownload = this.handleDownload.bind(this);
   }
 
+  componentDidMount() {
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.DocumentManager;
+    const web3 = drizzle.web3;
+    const ContractWeb3 = new web3.eth.Contract(contract.abi, contract.address);
+    this.props.fetchDocuments(ContractWeb3)
+  }
+
   getDocFromBlockchain(numDoc) {
+    
     const { drizzle } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const result = getDocMinedByIndex(numDoc, contract);
-    
+    getAllBlock(contract);
+
+
     result.then(block => {
       this.setState({docSelecting: block})
       })

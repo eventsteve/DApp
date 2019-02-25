@@ -1,15 +1,25 @@
-import * as request from 'api/request_server';
+import {getAllBlock, createNewBlock} from 'request_sc/doc_manager';
 
 const FETCH_DOC = 'doc/FETCH_DOC';
 const ADD_DOC = 'doc/ADD_DOC';
 
-export const fetchDocuments = () => {
+export const fetchDocuments = (contract) => {
   return (dispatch) => {
-    request.getAllDoc()
+    getAllBlock(contract)
     .then((response) => {
+      const parsenData = response.map(block => {
+        return {
+          numDoc: block.returnValues._numDoc,
+          owner: block.returnValues._owner,
+          name: block.returnValues._name,
+          contentHash: block.returnValues._contentHash,
+          linkIpfsCrypt: block.returnValues._linkIpfsCrypt,
+          createdAt: block.returnValues._createdAt
+        }
+      })
       dispatch({
         type: FETCH_DOC,
-        payload: response.data
+        payload: parsenData
       })
     })
     .catch((error) => {
@@ -20,7 +30,7 @@ export const fetchDocuments = () => {
 
 export const addNewDocuments = (params) => {
   return (dispatch) => {
-    request.addNewDoc(params)
+    createNewBlock(params)
     .then((response) => {
       dispatch({
         type: ADD_DOC,
@@ -34,7 +44,8 @@ export const addNewDocuments = (params) => {
 }
 
 const initState = {
-  documents: []
+  documents: [],
+  docDetail: null
 }
 
 export const docReducer = (state = initState, action) => {

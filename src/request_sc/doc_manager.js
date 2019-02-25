@@ -16,6 +16,7 @@ export function getDocMinedByIndex(numdoc, contract) {
     })
   });
 }
+
 export async function getAllBlock(contract) {
   try {
     return contract.getPastEvents('LogCreatedDoc', {
@@ -26,9 +27,10 @@ export async function getAllBlock(contract) {
   } catch (e) {
     console.log
   }
-  
+
 }
-export function mineNewBlock(docInfo, contract, owner) {
+
+export function createNewBlock(docInfo, contract, owner) {
   return new Promise((resolve, reject) => {
     contract.methods.newDocument(docInfo.name , docInfo.hashContent, docInfo.ipfsCrypt).send({from: owner})
       .on('receipt', (receipt) => {
@@ -52,7 +54,8 @@ export function mineNewBlock(docInfo, contract, owner) {
           name: LogCreatedDoc.returnValues._name,
           contentHash: LogCreatedDoc.returnValues._contentHash,
           linkIpfsCrypt: LogCreatedDoc.returnValues._linkIpfsCrypt,
-          owner: LogCreatedDoc.returnValues._owner
+          owner: LogCreatedDoc.returnValues._owner,
+          createdAt: LogCreatedDoc.returnValues._createdAt
         }
         resolve(result);
       }).on('error', (err) => reject(err));

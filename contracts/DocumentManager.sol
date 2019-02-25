@@ -13,6 +13,7 @@ contract DocumentManager {
         string name;
         string contentHash;
         string linkIpfsCrypt;
+        uint createdAt;
         uint nbRequests;
         mapping (uint => Request) requests;
     }
@@ -31,7 +32,8 @@ contract DocumentManager {
         address indexed _owner,
         string _name,
         string _contentHash,
-        string _linkIpfsCrypt
+        string _linkIpfsCrypt,
+        uint _createdAt
     );
 
     function newDocument(
@@ -47,6 +49,7 @@ contract DocumentManager {
         documents[numDocuments].name = _name;
         documents[numDocuments].contentHash = _contentHash;
         documents[numDocuments].linkIpfsCrypt = _linkIpfsCrypt;
+        documents[numDocuments].createdAt = block.timestamp;
         documents[numDocuments].nbRequests = 0;
 
         emit LogCreatedDoc(
@@ -54,7 +57,8 @@ contract DocumentManager {
             msg.sender,
             _name,
             _contentHash,
-            _linkIpfsCrypt
+            _linkIpfsCrypt,
+            block.timestamp
         );
 
         return true;
@@ -102,14 +106,16 @@ contract DocumentManager {
             address _owner,
             string _name,
             string _contentHash,
-            string _linkIpfsCrypt
+            string _linkIpfsCrypt,
+            uint _createdAt
         )
     {
         return (
             documents[documentId].owner,
             documents[documentId].name,
             documents[documentId].contentHash,
-            documents[documentId].linkIpfsCrypt
+            documents[documentId].linkIpfsCrypt,
+            documents[documentId].createdAt
         );
     }
 

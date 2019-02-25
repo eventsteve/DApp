@@ -19,9 +19,11 @@ class DocContainer extends Component {
     };
   }
 
-  componentDidMount() {
-    this.props.fetchDocuments();
+  componentWillMount() {
     const { drizzle } = this.props;
+    
+
+
     this.unsubscribe = drizzle.store.subscribe(() => {
       const drizzleState = drizzle.store.getState();
       if (drizzleState.drizzleStatus.initialized) {
@@ -31,7 +33,10 @@ class DocContainer extends Component {
   }
 
   componentWillUnmount() {
+    console.log('sdfsdf');
+    
     this.unsubscribe();
+
   }
 
   render() {
@@ -60,6 +65,7 @@ class DocContainer extends Component {
                 documents={documents}
                 drizzle={this.props.drizzle}
                 drizzleState={this.state.drizzleState}
+                fetchDocuments={this.props.fetchDocuments}
               />
 
               <ModalUpload
@@ -86,7 +92,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchDocuments: () => dispatch(fetchDocuments()),
+    fetchDocuments: (params) => dispatch(fetchDocuments(params)),
     addNewDocuments: (params) => dispatch(addNewDocuments(params)),
   }
 };
