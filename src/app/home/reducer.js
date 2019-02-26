@@ -1,33 +1,29 @@
-import * as request from 'api/request_server';
+import {getAllBlock, createNewBlock} from 'request_sc/doc_manager';
 
 const FETCH_MEMBER = 'home/FETCH_MEMBER';
 const FETCH_DOC = 'home/FETCH_DOC';
 
-export const fetchMembers = () => {
-  return (dispatch) => {
-    request.getAllMember()
-    .then((response) => {
-      dispatch({
-        type: FETCH_MEMBER,
-        payload: response.data
-      })
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  };
-}
 
-export const fetchDocuments = () => {
+export const fetchDocuments = (contract) => {
   return (dispatch) => {
-    request.getAllDoc()
+    getAllBlock(contract)
     .then((response) => {
+      const parsenData = response.map(block => {
+        return {
+          numDoc: block.returnValues._numDoc,
+          owner: block.returnValues._owner,
+          name: block.returnValues._name,
+          contentHash: block.returnValues._contentHash,
+          linkIpfsCrypt: block.returnValues._linkIpfsCrypt,
+          createdAt: block.returnValues._createdAt
+        }
+      })
       dispatch({
         type: FETCH_DOC,
-        payload: response.data
+        payload: parsenData
       })
     })
-    .catch(function (error) {
+    .catch((error) => {
       console.log(error);
     });
   };

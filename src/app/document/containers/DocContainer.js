@@ -6,47 +6,26 @@ import PropTypes from 'prop-types';
 import ListDoc from '../components/ListDocument';
 import ModalUpload from '../components/ModalUpload';
 import { fetchDocuments, addNewDocuments } from '../reducer';
-import loading from 'images/loading.svg';
 
 class DocContainer extends Component {
 
   constructor(props) {
     super(props)
     this.state = {
-      isShowUpload: false,
-      loading: true,
-      drizzleState: null
+      isShowUpload: false
     };
   }
 
   componentWillMount() {
     const { drizzle } = this.props;
-    
-
-
-    this.unsubscribe = drizzle.store.subscribe(() => {
-      const drizzleState = drizzle.store.getState();
-      if (drizzleState.drizzleStatus.initialized) {
-        this.setState({ loading: false, drizzleState });
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    console.log('sdfsdf');
-    
-    this.unsubscribe();
-
+    const contract = drizzle.contracts.DocumentManager;
+    const web3 = drizzle.web3;
+    const ContractWeb3 = new web3.eth.Contract(contract.abi, contract.address);
+    // this.props.fetchDocuments(ContractWeb3);
   }
 
   render() {
     const { documents } = this.props
-    if (this.state.loading) return (
-      <div className="text-center">
-        <img src={loading}/>
-        <p> Connecting to Ethereum Virtual Machine... </p>
-      </div>
-    )
     return (
       <Row className="mt-4">
         <Col md={12}>
@@ -63,9 +42,6 @@ class DocContainer extends Component {
             <Card.Body>
               <ListDoc
                 documents={documents}
-                drizzle={this.props.drizzle}
-                drizzleState={this.state.drizzleState}
-                fetchDocuments={this.props.fetchDocuments}
               />
 
               <ModalUpload

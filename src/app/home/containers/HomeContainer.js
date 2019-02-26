@@ -5,24 +5,20 @@ import { Row, Col} from 'react-bootstrap';
 import ListMem from '../components/ListMem';
 import ListDoc from '../components/ListDoc';
 
-import { fetchMembers, fetchDocuments } from '../reducer';
+import { fetchDocuments } from '../reducer';
 class HomeContainer extends Component {
 
   componentWillMount() {
-    this.props.fetchMembers();
     this.props.fetchDocuments();
   }
 
   render() {
-    const { members, documents } = this.props
+    const { documents } = this.props
     
     return (
       <Row className="mt-4">
-        <Col md={8}>
+        <Col md={12}>
           <ListDoc documents={documents} />
-        </Col>
-        <Col md={4}>
-          <ListMem members={members} />
         </Col>
       </Row>
     )
@@ -39,7 +35,6 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchMembers: () => dispatch(fetchMembers()),
     fetchDocuments: () => dispatch(fetchDocuments()),
   }
 };

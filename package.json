@@ -4,7 +4,7 @@
   "description": "Document manager smart contract using truffle - solidity - reactjs webpack - ipfs",
   "main": "truffle.js",
   "scripts": {
-    "serve": "truffle migrate --reset --compile-all && cd server && knex migrate:latest && knex seed:run && yarn start",
+    "evm": "truffle migrate --reset --compile-all",
     "start": "webpack-dev-server --mode development --open --hot --port 3000",
     "build": "webpack --mode production"
   },

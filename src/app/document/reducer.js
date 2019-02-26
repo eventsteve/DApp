@@ -28,10 +28,12 @@ export const fetchDocuments = (contract) => {
   };
 }
 
-export const addNewDocuments = (params) => {
+export const addNewDocuments = (fileInfo, contract, owner) => {
   return (dispatch) => {
-    createNewBlock(params)
+    createNewBlock(fileInfo, contract, owner)
     .then((response) => {
+      console.log(response);
+      
       dispatch({
         type: ADD_DOC,
         payload: response.data

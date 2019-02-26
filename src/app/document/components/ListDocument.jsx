@@ -17,14 +17,6 @@ export default class ListDoc extends Component {
     this.handleDownload = this.handleDownload.bind(this);
   }
 
-  componentDidMount() {
-    const { drizzle } = this.props;
-    const contract = drizzle.contracts.DocumentManager;
-    const web3 = drizzle.web3;
-    const ContractWeb3 = new web3.eth.Contract(contract.abi, contract.address);
-    this.props.fetchDocuments(ContractWeb3)
-  }
-
   getDocFromBlockchain(numDoc) {
     
     const { drizzle } = this.props;

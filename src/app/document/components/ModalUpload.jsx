@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { Modal, Button, Table } from 'react-bootstrap';
 import UploadFile from 'components/form/UploadFile';
-import { mineNewBlock } from 'utils/helper/callBlockchain';
 import loadingIcon from 'images/loading.svg';
 
 class ModalUpload extends Component {
@@ -22,16 +21,17 @@ class ModalUpload extends Component {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const owner = drizzleState.accounts[0];
-    mineNewBlock(infoFileUploaded, contract, owner)
-      .then(blocMined => {
-        blocMined.dataInfo.linkIpfs = infoFileUploaded.ipfs
-        this.setState({
-          documentInfo: blocMined.dataInfo,
-          blockMined: blocMined.blockInfo,
-          loading: false
-        })
-        this.props.addNewDocuments(blocMined.dataInfo);
-      }).catch(console.log);
+    console.log(infoFileUploaded);
+    
+    this.props.addNewDocuments(infoFileUploaded, contract, owner, responseCb)
+    const responseCb = blocMined => {
+      blocMined.dataInfo.linkIpfs = infoFileUploaded.ipfs
+      this.setState({
+        documentInfo: blocMined.dataInfo,
+        blockMined: blocMined.blockInfo,
+        loading: false
+      })
+    };
   }
 
   renderFileInfo(document, block) {
@@ -106,6 +106,7 @@ class ModalUpload extends Component {
     })
     this.props.handleHide();
   }
+
   render() {
     const { documentInfo, blockMined, loading } = this.state
     return (
