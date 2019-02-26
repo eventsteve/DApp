@@ -13,8 +13,6 @@ class UploadFile extends React.Component {
   async handleselectedFile(event) {
     event.stopPropagation()
     event.preventDefault()
-    console.log('sdfs');
-    
     const file = event.target.files[0];
     this.setState({ nameFile: file.name})
     let reader = new window.FileReader()

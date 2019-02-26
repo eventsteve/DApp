@@ -1,2 +1,45 @@
+import React, { Component, Fragment } from 'react';
+import loadingIcon from 'images/loading.svg';
+import DocContainer from './containers/DocContainer';
+
 export { docReducer } from './reducer';
-export { default as DocContainer } from './containers/DocContainer';
+export class Document extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      loading: true,
+      drizzleState: null
+    };
+  }
+
+  componentWillMount() {
+    const { drizzle } = this.props;
+    this.unsubscribe = drizzle.store.subscribe(() => {
+      const drizzleState = drizzle.store.getState();
+      if (drizzleState.drizzleStatus.initialized) {
+        this.setState({ loading: false, drizzleState });
+      }
+    });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  render() {
+    return (
+      <Fragment>
+        {(this.state.loading)
+        ? (<div className="text-center">
+          <img src={loadingIcon}/>
+          <p> Connecting to Ethereum Virtual Machine... </p>
+        </div>)
+        : (<DocContainer
+          drizzle={this.props.drizzle}
+          drizzleState={this.state.drizzleState}
+        />)
+        }
+      </Fragment>
+    )
+  }
+}

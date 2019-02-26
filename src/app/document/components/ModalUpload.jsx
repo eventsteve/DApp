@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { Modal, Button, Table } from 'react-bootstrap';
 import UploadFile from 'components/form/UploadFile';
 import loadingIcon from 'images/loading.svg';
@@ -20,11 +20,7 @@ class ModalUpload extends Component {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const owner = drizzleState.accounts[0];
-    const dataTest = {
-      name: "name" ,
-      hashContent: "hash content",
-      ipfsCrypt: "ipfs"
-    }
+
     const responseCb = (blocMined) => {
       blocMined.content.linkIpfs = infoFileUploaded.ipfs
       this.setState({
@@ -32,7 +28,7 @@ class ModalUpload extends Component {
         loading: false
       })
     };
-    this.props.addNewDocuments(dataTest, contract, owner, responseCb);
+    this.props.addNewDocuments(infoFileUploaded, contract, owner, responseCb);
   }
 
   renderFileInfo(block) {
@@ -111,11 +107,7 @@ class ModalUpload extends Component {
   render() {
     const { blockMined, loading } = this.state
     return (
-      <>
-      <Button
-        variant="secondary"
-        onClick={() => this.getInfoFile()}
-      >Add</Button>
+      <Fragment>
       <Modal
         size="lg"
         show={this.props.isShowUpload}
@@ -145,7 +137,7 @@ class ModalUpload extends Component {
           </Button>
         </Modal.Footer>
       </Modal>
-      </>
+      </Fragment>
     );
   }
 }

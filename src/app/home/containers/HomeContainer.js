@@ -8,7 +8,7 @@ import ListDoc from '../components/ListDoc';
 import { fetchDocuments } from '../reducer';
 class HomeContainer extends Component {
 
-  componentWillMount() {
+  componentDidMount() {
     const { drizzle } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const web3 = drizzle.web3;
@@ -18,7 +18,7 @@ class HomeContainer extends Component {
 
   render() {
     const { documents } = this.props
-    
+
     return (
       <Row className="mt-4">
         <Col md={12}>
