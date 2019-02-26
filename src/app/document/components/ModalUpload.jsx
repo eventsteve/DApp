@@ -8,7 +8,6 @@ class ModalUpload extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      documentInfo: null,
       blockMined: null,
       loading: false
     }
@@ -21,20 +20,22 @@ class ModalUpload extends Component {
     const { drizzle, drizzleState } = this.props;
     const contract = drizzle.contracts.DocumentManager;
     const owner = drizzleState.accounts[0];
-    console.log(infoFileUploaded);
-    
-    this.props.addNewDocuments(infoFileUploaded, contract, owner, responseCb)
-    const responseCb = blocMined => {
-      blocMined.dataInfo.linkIpfs = infoFileUploaded.ipfs
+    const dataTest = {
+      name: "name" ,
+      hashContent: "hash content",
+      ipfsCrypt: "ipfs"
+    }
+    const responseCb = (blocMined) => {
+      blocMined.content.linkIpfs = infoFileUploaded.ipfs
       this.setState({
-        documentInfo: blocMined.dataInfo,
-        blockMined: blocMined.blockInfo,
+        blockMined: blocMined,
         loading: false
       })
     };
+    this.props.addNewDocuments(dataTest, contract, owner, responseCb);
   }
 
-  renderFileInfo(document, block) {
+  renderFileInfo(block) {
     return (
       <Table hover>
         <thead>
@@ -46,33 +47,33 @@ class ModalUpload extends Component {
         <tbody>
           <tr>
             <td>Doc number</td>
-            <td>{document.numDoc}</td>
+            <td>{block.content.numDoc}</td>
           </tr>
           <tr>
             <td>Name</td>
-            <td>{document.name}</td>
+            <td>{block.content.name}</td>
           </tr>
           <tr>
             <td>Hash content</td>
-            <td>{document.contentHash}</td>
+            <td>{block.content.contentHash}</td>
           </tr>
           <tr>
             <td>Link ipfs</td>
             <td>
-              <a href={`https://ipfs.io/ipfs/${document.linkIpfs}`}>
-                {document.linkIpfs}
+              <a href={`https://ipfs.io/ipfs/${block.content.linkIpfs}`}>
+                {block.content.linkIpfs}
               </a>
             </td>
           </tr>
           <tr>
             <td>Link crypt</td>
             <td>
-              {document.linkIpfsCrypt}
+              {block.content.linkIpfsCrypt}
             </td>
           </tr>
           <tr>
             <td>Owner adress</td>
-            <td>{document.owner}</td>
+            <td>{block.content.owner}</td>
           </tr>
           <tr>
             <td>Block status</td>
@@ -108,8 +109,13 @@ class ModalUpload extends Component {
   }
 
   render() {
-    const { documentInfo, blockMined, loading } = this.state
+    const { blockMined, loading } = this.state
     return (
+      <>
+      <Button
+        variant="secondary"
+        onClick={() => this.getInfoFile()}
+      >Add</Button>
       <Modal
         size="lg"
         show={this.props.isShowUpload}
@@ -128,7 +134,7 @@ class ModalUpload extends Component {
             <p>Mine Ethereum... </p>
           </div> : ''}
 
-          { documentInfo && blockMined ? this.renderFileInfo(documentInfo, blockMined) : null }
+          { blockMined ? this.renderFileInfo(blockMined) : null }
         </Modal.Body>
         <Modal.Footer>
           <Button
@@ -139,6 +145,7 @@ class ModalUpload extends Component {
           </Button>
         </Modal.Footer>
       </Modal>
+      </>
     );
   }
 }

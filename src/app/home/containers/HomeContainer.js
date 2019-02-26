@@ -9,7 +9,11 @@ import { fetchDocuments } from '../reducer';
 class HomeContainer extends Component {
 
   componentWillMount() {
-    this.props.fetchDocuments();
+    const { drizzle } = this.props;
+    const contract = drizzle.contracts.DocumentManager;
+    const web3 = drizzle.web3;
+    const ContractWeb3 = new web3.eth.Contract(contract.abi, contract.address);
+    this.props.fetchDocuments(ContractWeb3);
   }
 
   render() {
@@ -35,7 +39,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
   return {
-    fetchDocuments: () => dispatch(fetchDocuments()),
+    fetchDocuments: (contract) => dispatch(fetchDocuments(contract)),
   }
 };
 

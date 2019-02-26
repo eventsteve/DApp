@@ -127,7 +127,8 @@ contract DocumentManager {
             address _owner,
             string _name,
             string _contentHash,
-            string _linkIpfsCrypt
+            string _linkIpfsCrypt,
+            uint _createdAt
         )
     {
         return (
@@ -135,7 +136,8 @@ contract DocumentManager {
             documents[numDocuments].owner,
             documents[numDocuments].name,
             documents[numDocuments].contentHash,
-            documents[numDocuments].linkIpfsCrypt
+            documents[numDocuments].linkIpfsCrypt,
+            documents[numDocuments].createdAt
         );
     }
 }

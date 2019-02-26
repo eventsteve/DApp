@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { Table, Button, Modal, ListGroup } from 'react-bootstrap';
-import { getDocMinedByIndex, getAllBlock } from 'utils/helper/callBlockchain';
 import { getFromIpfs, dataToFile } from 'utils/helper/ipfs';
+import { convertTimeStampToString } from 'utils/helper/common';
 
 export default class ListDoc extends Component {
   
@@ -18,17 +18,11 @@ export default class ListDoc extends Component {
   }
 
   getDocFromBlockchain(numDoc) {
-    
     const { drizzle } = this.props;
     const contract = drizzle.contracts.DocumentManager;
-    const result = getDocMinedByIndex(numDoc, contract);
-    getAllBlock(contract);
 
-
-    result.then(block => {
-      this.setState({docSelecting: block})
-      })
-      .catch(console.log);
+    const cbResponse = (block) => this.setState({docSelecting: block})
+    this.props.getDocByIndex(numDoc, contract, cbResponse);
   }
 
   handleDownload() {
@@ -39,7 +33,7 @@ export default class ListDoc extends Component {
   }
 
   handleShowModalDownload(doc) {
-    this.getDocFromBlockchain(doc.num_doc);
+    this.getDocFromBlockchain(doc.numDoc);
     this.setState({
       isShowModalDownload: true
     })
@@ -103,15 +97,16 @@ export default class ListDoc extends Component {
         </thead>
         <tbody>
           {documents.map((doc, index) => {
-            const dateUploaded = new Date(doc.created_at);
+            const dateUploaded = convertTimeStampToString(doc.createdAt);
+            
             return (
               <tr key={index}>
-                <td>{doc.num_doc}</td>
+                <td>{doc.numDoc}</td>
                 <td>{doc.name}</td>
-                <td>{doc.hash_content}</td>
-                <td>{doc.link_ipfs_crypt}</td>
+                <td>{doc.contentHash}</td>
+                <td>{doc.linkIpfsCrypt}</td>
                 <td>{doc.owner}</td>
-                <td>{dateUploaded.toDateString()}</td>
+                <td>{dateUploaded}</td>
                 <td>
                   <Button
                     variant="primary"

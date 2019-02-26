@@ -1,4 +1,5 @@
-import {getAllBlock, createNewBlock} from 'request_sc/doc_manager';
+import { getAllBlock } from 'request_sc/doc_manager';
+import { parsenDataBlock } from 'utils/helper/common';
 
 const FETCH_MEMBER = 'home/FETCH_MEMBER';
 const FETCH_DOC = 'home/FETCH_DOC';
@@ -9,14 +10,7 @@ export const fetchDocuments = (contract) => {
     getAllBlock(contract)
     .then((response) => {
       const parsenData = response.map(block => {
-        return {
-          numDoc: block.returnValues._numDoc,
-          owner: block.returnValues._owner,
-          name: block.returnValues._name,
-          contentHash: block.returnValues._contentHash,
-          linkIpfsCrypt: block.returnValues._linkIpfsCrypt,
-          createdAt: block.returnValues._createdAt
-        }
+        return parsenDataBlock(block.returnValues);
       })
       dispatch({
         type: FETCH_DOC,

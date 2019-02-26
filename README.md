@@ -18,19 +18,16 @@ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POS
 ## Run service
 ```
 git clone https://github.com/Tinh96nb/DApp.git
-npm install -g knex
 npm install -g truffle
 cd DApp
 npm install
 ```
 
 ## Start project
-- Start serve api: `npm serve`
 - Start mode dev: `npm start`
 - Build product: `npm build`
 
 ## Struct folder
 - `/migrations`: step file for migrate.
 - `/contracts`: smartcontract.
-- `/server`: server API.
 - `/src`: reactjs front-end.

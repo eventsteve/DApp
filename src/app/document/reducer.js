@@ -1,21 +1,16 @@
-import {getAllBlock, createNewBlock} from 'request_sc/doc_manager';
+import {getAllBlock, createNewBlock, getDocMinedByIndex} from 'request_sc/doc_manager';
+import {parsenDataBlock, parsenFullBlock} from 'utils/helper/common';
 
 const FETCH_DOC = 'doc/FETCH_DOC';
 const ADD_DOC = 'doc/ADD_DOC';
+const GET_DETAIL = 'doc/GET_DETAIL';
 
 export const fetchDocuments = (contract) => {
   return (dispatch) => {
     getAllBlock(contract)
     .then((response) => {
       const parsenData = response.map(block => {
-        return {
-          numDoc: block.returnValues._numDoc,
-          owner: block.returnValues._owner,
-          name: block.returnValues._name,
-          contentHash: block.returnValues._contentHash,
-          linkIpfsCrypt: block.returnValues._linkIpfsCrypt,
-          createdAt: block.returnValues._createdAt
-        }
+        return parsenDataBlock(block.returnValues);
       })
       dispatch({
         type: FETCH_DOC,
@@ -28,16 +23,35 @@ export const fetchDocuments = (contract) => {
   };
 }
 
-export const addNewDocuments = (fileInfo, contract, owner) => {
+export const addNewDocuments = (fileInfo, contract, owner, cb) => {
   return (dispatch) => {
     createNewBlock(fileInfo, contract, owner)
     .then((response) => {
-      console.log(response);
-      
+      const {returnValues} = response.events.LogCreatedDoc
+      const parsenData = parsenDataBlock(returnValues);
       dispatch({
         type: ADD_DOC,
-        payload: response.data
+        payload: parsenData
       })
+      const fullBlock = parsenFullBlock(response);
+      return cb && cb(fullBlock);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  };
+}
+
+export const getDocByIndex = (numDoc, contract, cb) => {
+  return (dispatch) => {
+    getDocMinedByIndex(numDoc, contract)
+    .then((response) => {
+      const parsenData = parsenDataBlock(response);
+      dispatch({
+        type: GET_DETAIL,
+        payload: parsenData
+      })
+      return cb && cb(parsenData);
     })
     .catch((error) => {
       console.log(error);
@@ -46,8 +60,7 @@ export const addNewDocuments = (fileInfo, contract, owner) => {
 }
 
 const initState = {
-  documents: [],
-  docDetail: null
+  documents: []
 }
 
 export const docReducer = (state = initState, action) => {

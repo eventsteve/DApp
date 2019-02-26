@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import {Card, Table} from 'react-bootstrap';
+import { convertTimeStampToString } from 'utils/helper/common';
 
 export default class ListDoc extends Component {
   render() {
@@ -21,15 +22,15 @@ export default class ListDoc extends Component {
             </thead>
             <tbody>
                 {this.props.documents.map((doc, index) => {
-                  const dateUploaded = new Date(doc.created_at);
+                  const dateUploaded = convertTimeStampToString(doc.createdAt);
                   return (
                     <tr key={index}>
-                      <td>{doc.num_doc}</td>
+                      <td>{doc.numDoc}</td>
                       <td>{doc.name}</td>
-                      <td>{doc.hash_content}</td>
-                      <td>{doc.link_ipfs_crypt}</td>
+                      <td>{doc.contentHash}</td>
+                      <td>{doc.linkIpfsCrypt}</td>
                       <td>{doc.owner}</td>
-                      <td>{dateUploaded.toDateString()}</td>
+                      <td>{dateUploaded}</td>
                     </tr>
                   )
                 })}
