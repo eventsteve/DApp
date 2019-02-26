@@ -15,7 +15,7 @@ ipfs config --json API.HTTPHeaders.Access-Control-Allow-Origin "[\"*\"]"
 ipfs config --json API.HTTPHeaders.Access-Control-Allow-Methods "[\"PUT\", \"POST\",\"GET\"]"
 ```
 
-## Run service
+## Install library
 ```
 git clone https://github.com/Tinh96nb/DApp.git
 npm install -g truffle
