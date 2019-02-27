@@ -7,7 +7,6 @@ export default class ListMem extends Component {
       <Card>
         <Card.Header as="h5">List Member</Card.Header>
         <Card.Body>
-          <Card.Title>List member upload file</Card.Title>
           <Table striped bordered hover>
             <thead>
               <tr>

@@ -17,12 +17,14 @@ class HomeContainer extends Component {
   }
 
   render() {
-    const { documents } = this.props
-
+    const { documents, members } = this.props
     return (
       <Row className="mt-4">
-        <Col md={12}>
+        <Col md={9}>
           <ListDoc documents={documents} />
+        </Col>
+        <Col md={3}>
+          <ListMem members={members} />
         </Col>
       </Row>
     )

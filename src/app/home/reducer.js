@@ -1,9 +1,7 @@
 import { getAllBlock } from 'request_sc/doc_manager';
 import { parsenDataBlock } from 'utils/helper/common';
 
-const FETCH_MEMBER = 'home/FETCH_MEMBER';
 const FETCH_DOC = 'home/FETCH_DOC';
-
 
 export const fetchDocuments = (contract) => {
   return (dispatch) => {
@@ -12,9 +10,13 @@ export const fetchDocuments = (contract) => {
       const parsenData = response.map(block => {
         return parsenDataBlock(block.returnValues);
       })
+      const listOwner = [... new Set(parsenData.map((block) => block.owner))];
       dispatch({
         type: FETCH_DOC,
-        payload: parsenData
+        payload: {
+          docs: parsenData,
+          members: listOwner
+        }
       })
     })
     .catch((error) => {
@@ -30,10 +32,8 @@ const initState = {
 
 export const homeReducer = (state = initState, action) => {
   switch (action.type) {
-    case FETCH_MEMBER:
-      return { ...state, members: action.payload };
       case FETCH_DOC:
-      return { ...state, documents: action.payload };
+      return { ...state, documents: action.payload.docs, members: action.payload.members };
     default:
       return state;
   }
