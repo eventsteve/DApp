@@ -8,7 +8,6 @@ export default class ListDoc extends Component {
       <Card>
         <Card.Header as="h5">List Document</Card.Header>
         <Card.Body>
-          <Card.Title>List file uploaed</Card.Title>
           <Table striped bordered hover>
             <thead>
               <tr>

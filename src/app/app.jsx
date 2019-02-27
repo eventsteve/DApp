@@ -19,9 +19,9 @@ class App extends Component {
       <CheckWeb3>
         <Router>
           <Fragment>
-            <NavBar />
+            <NavBar/>
             <Container>
-              <Row>
+              <Row className="wraper">
                 <Col md={12}>
                   <Switch>
                     <Route exact path='/' component={(routeProps) =>

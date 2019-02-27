@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import miningIcon from 'images/mining.svg';
 import loadingIcon from 'images/loading.svg';
+
 import DocContainer from './containers/DocContainer';
 
 export { docReducer } from './reducer';
@@ -8,6 +10,7 @@ export class Document extends Component {
     super(props)
     this.state = {
       loading: true,
+      isMining: false,
       drizzleState: null
     };
   }
@@ -18,6 +21,8 @@ export class Document extends Component {
       const drizzleState = drizzle.store.getState();
       if (drizzleState.drizzleStatus.initialized) {
         this.setState({ loading: false, drizzleState });
+        drizzle.web3.eth.isMining()
+          .then((result) => this.setState({isMining: result}));
       }
     });
   }
@@ -34,10 +39,18 @@ export class Document extends Component {
           <img src={loadingIcon}/>
           <p> Connecting to Ethereum Virtual Machine... </p>
         </div>)
-        : (<DocContainer
-          drizzle={this.props.drizzle}
-          drizzleState={this.state.drizzleState}
-        />)
+        : (
+          <div>
+            {(this.state.isMining) ? <div className="mining">
+              <img src={miningIcon} />
+              <span>mining...</span>
+            </div>: ''}
+            <DocContainer
+            drizzle={this.props.drizzle}
+            drizzleState={this.state.drizzleState}
+            />
+          </div>
+          )
         }
       </Fragment>
     )

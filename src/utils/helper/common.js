@@ -1,5 +1,11 @@
-export function arrayBufferToBase64 (buffer) {
-    return btoa(String.fromCharCode(...new Uint8Array(buffer)));
+export function arrayBufferToBase64 (buffer, callback) {
+  const blob = new Blob([buffer], {type:'application/octet-binary'});
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+      const dataurl = evt.target.result;
+      callback(dataurl.substr(dataurl.indexOf(',')+1));
+  };
+  reader.readAsDataURL(blob);
 }
 
 export function base64ToArrayBuffer (s) {
@@ -53,3 +59,8 @@ export function convertTimeStampToString(timestamp) {
 
   return hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2) + ' ' + ddmmyy;
 }
+
+export function getUrlParams() {
+  const path = window.location.pathname;
+  return path;
+};

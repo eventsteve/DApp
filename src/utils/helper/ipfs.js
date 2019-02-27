@@ -30,11 +30,15 @@ export const getFromIpfs = (ipfsCrypt) => {
       if (err) reject(err);
       const file = files[0];
       if (file && file.content) {
-        const contentBase64 = decryptAes(arrayBufferToBase64(file.content));
-        if (!contentBase64) {
-          reject(`Can't decrypt content file.`);
+
+        const cbResult = (data) => {
+          const contentBase64 = decryptAes(data);
+          if (!contentBase64) {
+            reject(`Can't decrypt content file.`);
+          }
+          resolve(contentBase64)
         }
-        resolve(contentBase64)
+        arrayBufferToBase64(file.content, cbResult)
       }
     })
   })

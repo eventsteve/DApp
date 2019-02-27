@@ -8,3 +8,19 @@ table {
 .pointer {
   cursor: pointer;
 }
+.wraper {
+  position: relative;
+}
+.mining img {
+  position: absolute;
+  top: -15%;
+  right: 0;
+  width: 100px;
+}
+span {
+  font-size: 14px;
+  position: absolute;
+  top: -4%;
+  right: 19px;
+  color: rgba(255,255,255,.5);
+}
