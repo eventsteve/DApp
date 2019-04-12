@@ -10,7 +10,7 @@ import 'css/main.css';
 import NavBar from 'components/ui/NavBar';
 import CheckWeb3 from 'utils/helper/checkWeb3';
 
-import { Home } from './home';
+import Home from './home';
 import { Document } from './document';
 
 class App extends Component {
@@ -24,18 +24,8 @@ class App extends Component {
               <Row className="wraper">
                 <Col md={12}>
                   <Switch>
-                    <Route exact path='/' component={(routeProps) =>
-                      <Home
-                        {...routeProps}
-                        drizzle={this.props.drizzle}
-                      />
-                    }/>
-                    <Route path='/docs' component={(routeProps) =>
-                      <Document
-                        {...routeProps}
-                        drizzle={this.props.drizzle}
-                      />
-                    }/>
+                    <Route exact path='/' component={Home}/>
+            
                     <Route component={() => (<p>Not Found</p>)} />
                   </Switch>
                 </Col>

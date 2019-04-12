@@ -1,62 +1,42 @@
-import React, { Component, Fragment } from 'react';
-import loadingIcon from 'images/loading.svg';
-import miningIcon from 'images/mining.svg';
+import React, { Component } from "react";
+import { drizzleConnect } from "drizzle-react";
 
-import  HomeContainer from './containers/HomeContainer';
-
-export { homeReducer } from './reducer';
-export class Home extends Component {
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      loading: true,
-      isMining: false,
-      drizzleState: null
-    };
-  }
-
-  componentWillMount() {
-    const { drizzle } = this.props;
-    this.unsubscribe = drizzle.store.subscribe(() => {
-      const drizzleState = drizzle.store.getState();
-      if (drizzleState.drizzleStatus.initialized) {
-        this.setState({
-          loading: false,
-          drizzleState,
-        });
-        drizzle.web3.eth.isMining()
-          .then((result) => this.setState({isMining: result}));
-      }
-    });
-  }
-
-  componentWillUnmount() {
-    this.unsubscribe();
-  }
-
+class App extends Component {
   render() {
-    return (
-      <Fragment>
-        {(this.state.loading)
-        ? (<div className="text-center">
-          <img src={loadingIcon}/>
-          <p> Connecting to Ethereum Virtual Machine... </p>
-        </div>)
-        : (
-        <div>
-          {(this.state.isMining) ? <div className="mining">
-            <img src={miningIcon} />
-            <span>mining...</span>
-          </div>: ''}
-          <HomeContainer
-          drizzle={this.props.drizzle}
-          drizzleState={this.state.drizzleState}
-          />
+    const { drizzleStatus, accounts } = this.props;
+
+    
+    if (drizzleStatus.initialized) {
+      return (
+        <div className="App">
+          <header className="App-header">
+            <h1 className="App-title">Tutorial Token</h1>
+            <p>
+              <strong>Total Supply</strong>:{" "}
+            </p>
+            <h3>Send Tokens</h3>
+          </header>
         </div>
-        )
-        }
-      </Fragment>
-    )
+      );
+    }
+
+    return <div>Loading dapp...</div>;
   }
 }
+
+const mapStateToProps = (state) => {
+  return {
+    accounts: state.accounts,
+    drizzleStatus: state.drizzleStatus,
+    contracts: state.contracts
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchWorkingDay: () => dispatch(fetchWorkingDay())
+  };
+};
+
+const AppContainer = drizzleConnect(App, mapStateToProps, mapDispatchToProps);
+export default AppContainer;

@@ -89,7 +89,7 @@ export default class ListDoc extends Component {
             <th style={{width: '5%'}}>#</th>
             <th>Name</th>
             <th>Hash Doc</th>
-            <th>Hash Link Ipfs</th>
+            <th>Link Ipfs Crypted</th>
             <th>Owner</th>
             <th style={{width: '13%'}}>Upload at</th>
             <th style={{width: '11%'}}>Action</th>

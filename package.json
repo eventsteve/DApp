@@ -6,7 +6,7 @@
   "scripts": {
     "evm": "truffle migrate --reset --compile-all",
     "start": "webpack-dev-server --mode development --open --hot --port 3000",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production --env.GENERATE_SOURCEMAP=false"
   },
   "author": "phamductinhkma@gmail.com",
   "license": "ISC",
@@ -33,6 +33,7 @@
     "crypto-js": "^3.1.9-1",
     "dotenv": "6.2.0",
     "drizzle": "^1.3.3",
+    "drizzle-react": "1.2.0",
     "file-saver": "2.0.1",
     "ipfs-http-client": "29.1.0",
     "react": "16.7.0",

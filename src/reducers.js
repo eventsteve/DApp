@@ -1,11 +1,9 @@
 import { combineReducers } from 'redux';
 
-import { homeReducer } from './app/home';
-import { docReducer } from './app/document';
+import { drizzleReducers } from 'drizzle'
 
 const rootReducer = combineReducers({
-  home: homeReducer,
-  doc: docReducer
+  ...drizzleReducers
 });
 
 export default rootReducer;

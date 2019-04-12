@@ -2,29 +2,32 @@ pragma solidity ^0.4.22;
 
 contract DocumentManager {
 
+    address public admin;
+
     mapping (uint => Document) documents;
     uint public numDocuments;
-    address public owner;
+    mapping (uint => User) users;
+    uint public
 
-    enum Status {UNKNOWN, PENDDING, OPEN, DENIED}
+    enum Status {PENDDING, ACEPTED, REJECTED} // 0,1,2
 
     struct Document{
         address owner;
         string name;
         string contentHash;
         string linkIpfsCrypt;
+        string category;
+        Status status;
         uint createdAt;
-        uint nbRequests;
-        mapping (uint => Request) requests;
     }
 
-    struct Request {
+    struct User {
         address owner;
-        Status status;
+        string privateKey;
     }
 
     constructor() public {
-        owner = msg.sender;
+        admin = msg.sender;
     }
 
     event LogCreatedDoc(
@@ -33,13 +36,16 @@ contract DocumentManager {
         string _name,
         string _contentHash,
         string _linkIpfsCrypt,
+        string _category,
+        Status _status,
         uint _createdAt
     );
 
     function newDocument(
         string _name,
         string _contentHash,
-        string _linkIpfsCrypt
+        string _linkIpfsCrypt,
+        string _category
     )
         public
         returns (bool success)
@@ -49,8 +55,9 @@ contract DocumentManager {
         documents[numDocuments].name = _name;
         documents[numDocuments].contentHash = _contentHash;
         documents[numDocuments].linkIpfsCrypt = _linkIpfsCrypt;
+        documents[numDocuments].category = _category;
+        documents[numDocuments].status = Status.PENDDING;
         documents[numDocuments].createdAt = block.timestamp;
-        documents[numDocuments].nbRequests = 0;
 
         emit LogCreatedDoc(
             numDocuments,
@@ -58,43 +65,27 @@ contract DocumentManager {
             _name,
             _contentHash,
             _linkIpfsCrypt,
+            _category,
+            Status.PENDDING,
             block.timestamp
         );
 
         return true;
     }
 
-    function requestDocument(uint documentId) public {
-        Document storage document = documents[documentId];
-        document.nbRequests++;
-        Request storage request = document.requests[document.nbRequests];
-        request.status = Status.PENDDING;
-        request.owner = msg.sender;
-    }
-
-    function grantAccess(uint documentId, uint requestId) public {
-        Document storage document = documents[documentId];
-        if (document.owner == msg.sender && document.requests[requestId].status == Status.PENDDING) {
-            document.requests[requestId].status = Status.OPEN;
+    function grantDocument(
+        uint documentId,
+        Status status
+    )
+        public
+    {
+        if(documents[documentId].owner == msg.sender) {
+            documents[documentId].status = status;
         }
     }
 
-    function denyAccess(uint documentId, uint requestId) public {
-        Document storage document = documents[documentId];
-        if (document.owner == msg.sender) {
-            document.requests[requestId].status = Status.DENIED;
-        }
-    }
-
-    function getRequestOwner(uint documentId, uint requestId) public view returns (address) {
-        Document storage document = documents[documentId];
-        if(document.owner == msg.sender){
-            return document.requests[requestId].owner;
-        }
-    }
-
-    function getRequestStatus(uint documentId, uint requestId) public view returns (Status) {
-        return documents[documentId].requests[requestId].status;
+    function setInfoUser(string privateKey) public {
+        
     }
 
     function getDocumentByIndex(
@@ -107,6 +98,8 @@ contract DocumentManager {
             string _name,
             string _contentHash,
             string _linkIpfsCrypt,
+            string _category,
+            Status _status,
             uint _createdAt
         )
     {
@@ -115,6 +108,8 @@ contract DocumentManager {
             documents[documentId].name,
             documents[documentId].contentHash,
             documents[documentId].linkIpfsCrypt,
+            documents[numDocuments].category,
+            documents[numDocuments].status,
             documents[documentId].createdAt
         );
     }
@@ -128,6 +123,8 @@ contract DocumentManager {
             string _name,
             string _contentHash,
             string _linkIpfsCrypt,
+            string _category,
+            Status _status,
             uint _createdAt
         )
     {
@@ -137,6 +134,8 @@ contract DocumentManager {
             documents[numDocuments].name,
             documents[numDocuments].contentHash,
             documents[numDocuments].linkIpfsCrypt,
+             documents[numDocuments].category,
+            documents[numDocuments].status,
             documents[numDocuments].createdAt
         );
     }

@@ -46,8 +46,8 @@ export class Document extends Component {
               <span>mining...</span>
             </div>: ''}
             <DocContainer
-            drizzle={this.props.drizzle}
-            drizzleState={this.state.drizzleState}
+              drizzle={this.props.drizzle}
+              drizzleState={this.state.drizzleState}
             />
           </div>
           )
